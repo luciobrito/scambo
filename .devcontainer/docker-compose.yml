@@ -1,0 +1,34 @@
+services:
+  api:
+    image: mcr.microsoft.com/devcontainers/dotnet:2-10.0
+    volumes:
+      - ..:/workspaces:cached
+    ports:
+      - "5000:5000"
+      - "5209:5209"
+    depends_on:
+      - db
+    working_dir: /workspaces
+    networks:
+      - backend
+    command: sleep infinity
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: scambo
+      MYSQL_USER: scambo_api
+      MYSQL_PASSWORD: 123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+volumes:
+  mysql-data:
+
+networks:
+  backend:
+    driver: bridge
