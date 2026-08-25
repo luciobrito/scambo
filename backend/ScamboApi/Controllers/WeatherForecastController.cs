@@ -6,9 +6,15 @@ namespace ScamboApi.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
+    private readonly ScamboContext _db;
+
+    public WeatherForecastController(ScamboContext db)
+    {
+        _db = db;
+    }
     private static readonly string[] Summaries =
     [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Gelo"
     ];
 
     [HttpGet(Name = "GetWeatherForecast")]
@@ -21,5 +27,10 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+    [HttpGet("conexao")]
+    public string Conexao()
+    {
+        return _db.Database.CanConnect().ToString();
     }
 }
