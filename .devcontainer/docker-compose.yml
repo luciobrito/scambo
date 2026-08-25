@@ -3,9 +3,7 @@ services:
     image: mcr.microsoft.com/devcontainers/dotnet:2-10.0
     volumes:
       - ..:/workspaces:cached
-    ports:
-      - "5000:5000"
-      - "5209:5209"
+    
     depends_on:
       - db
     working_dir: /workspaces

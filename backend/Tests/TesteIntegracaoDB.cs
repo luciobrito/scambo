@@ -9,7 +9,7 @@ public class TesteIntegracaoDB
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("Server=localhost;Port=3306;Database=scambo;User=scambo_api;Password=123;");
+            optionsBuilder.UseMySQL("Server=db;Port=3306;Database=scambo;User=scambo_api;Password=123;");
         }
     }
     [Fact]
