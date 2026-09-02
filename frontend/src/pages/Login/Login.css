@@ -1,0 +1,61 @@
+button {
+    font-size: 1rem;
+    max-width: 35rem;
+    max-height: 10rem;
+    padding: 0.2rem;
+    margin: 0.4rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    border: 2x solid;
+    border-radius: 4px;
+}
+
+
+
+.div-custom {
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.caixa-login{
+    max-width: fit-content;
+    padding: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin: 1rem;
+    margin-top: 4rem;
+    vertical-align: middle;
+    border: 2px solid;
+    border-radius: 0.8rem;
+}
+
+.form-custom {
+    font-size: 1.1rem;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 1rem;
+}
+
+.form-custom div {
+    padding: 0.3rem;
+}
+
+.form-custom label {
+    padding: 0.5rem;
+}
+
+.form-custom input {
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 4px;
+}
+
+
+
+
+
+
