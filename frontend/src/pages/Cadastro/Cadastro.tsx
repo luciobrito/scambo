@@ -1,7 +1,8 @@
+import Botao from "../../components/Botao/Botao";
 import styles from "./Cadastro.module.css";
 export default function Cadastro(){
     return <>
-    <h1>Escambo</h1>
+    <h1>Scambo</h1>
     <h2>Cadastro</h2>
     <div className = {styles.divCustom}>
         <form className={styles.formCustom}>
@@ -19,9 +20,10 @@ export default function Cadastro(){
 
             <label htmlFor="inputConfirmarSenha">Confirmar Senha:</label>
             <input id="inputConfirmarSenha" type="password" />
-
-            <button id="btnCadastrar" >Cadastrar</button>
+            <Botao carregando={false}>Meu botão</Botao>
         </form>
+                    
+
     </div>
     </>
 }
