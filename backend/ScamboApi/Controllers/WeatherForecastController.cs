@@ -39,18 +39,13 @@ public class WeatherForecastController : ControllerBase
     [HttpPost("arquivo")]
     public string arquivo(IFormFile file)
     {   
-        /*
-        Erro: ao enviar para Azure, o arquivo está indo com todo
-        o diretório do sistema. 
-        (/home/usuario/arquivo.png) deveria ser apenas (arquivo.png)
-        Manusear arquivo em memória?
-        */
-        using(var fs = new FileStream("/arquivo.png",FileMode.Create))
-        {
-            file.CopyTo(fs);
-            fs.Position = 0;
-            _armazenamento.EnviarArquivo(fs);
-        }
+        _armazenamento.EnviarArquivo(file);
         return "arquivo";
+    }
+    [HttpPost("arquivos")]
+    public string Arquivos(IFormFileCollection file)
+    {
+        file.ToList().ForEach(f => {_armazenamento.EnviarArquivo(f);});
+        return "arquivos";
     }
 }

@@ -5,7 +5,8 @@ namespace ScamboApi.Services;
 
 public interface IServicoArmazenamento
 {
-    void EnviarArquivo(FileStream arquivo);
+    void EnviarArquivo(IFormFile arquivo);
+    
     Response BaixarArquivo(string caminhoArquivo);
     
 }
