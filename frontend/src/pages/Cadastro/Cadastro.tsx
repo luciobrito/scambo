@@ -1,12 +1,29 @@
 import Botao from "../../components/Botao/Botao";
 import styles from "./Cadastro.module.css";
-import CadastroForm from "./forms/CadastroForm";
 export default function Cadastro(){
     return <>
     <h1>Scambo</h1>
     <h2>Cadastro</h2>
     <div className = {styles.divCustom}>
-        <CadastroForm children={undefined}></CadastroForm>
+        <form className={styles.formCustom}>
+            <label htmlFor="inputNome">Nome:</label>
+            <input id="inputNome" type="text" />
+
+            <label htmlFor="inputEmail">Email:</label>
+            <input id="inputEmail" type="email" />
+
+            <label htmlFor="inputTelefone">Telefone:</label>
+            <input id="inputTelefone" type="text" />
+
+            <label htmlFor="inputSenha">Senha:</label>
+            <input id="inputSenha" type="password" />
+
+            <label htmlFor="inputConfirmarSenha">Confirmar Senha:</label>
+            <input id="inputConfirmarSenha" type="password" />
+            <Botao carregando={false}>Meu botão</Botao>
+        </form>
+                    
+
     </div>
     </>
 }
