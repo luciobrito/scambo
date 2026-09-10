@@ -3,6 +3,7 @@ using System.Reflection.Metadata;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ScamboApi.Services;
 
@@ -17,14 +18,14 @@ public class ServicoArmazenamento : IServicoArmazenamento
     public void EnviarArquivo(IFormFile arquivo)
     {
         ValidarArquivo(arquivo);
+        var headerCustomizada = HeaderCustomizada(arquivo);
         using(var memoryStream = new MemoryStream())
         {
             arquivo.CopyTo(memoryStream);
             memoryStream.Position = 0;
             BlobClient blob = _blobContainerClient.GetBlobClient(GerarNomeUnicoArquivo(arquivo));
-            //Correção necessária: especificar header como arquivo de imagem, 
-            // na azure está chegando como octet
             blob.Upload(memoryStream);
+            blob.SetHttpHeaders(headerCustomizada);
         }
     }
     private void ValidarArquivo(IFormFile arquivo)
@@ -47,5 +48,21 @@ public class ServicoArmazenamento : IServicoArmazenamento
         if(!blobClient.Exists()) throw new FileNotFoundException();
         var downloadInfo = blobClient.DownloadStreaming();
         return downloadInfo;
+    }
+    private string ConsultarHeaderArquivo(IFormFile arquivo)
+    {
+        var provider = new FileExtensionContentTypeProvider();
+        if(provider.TryGetContentType(arquivo.FileName, out string? contentType))
+        {
+            return contentType;
+        }
+        else return "application/octet-stream";
+    }
+    private BlobHttpHeaders HeaderCustomizada(IFormFile arquivo)
+    {
+        return new BlobHttpHeaders
+        {
+            ContentType = ConsultarHeaderArquivo(arquivo)
+        };
     }
 }
