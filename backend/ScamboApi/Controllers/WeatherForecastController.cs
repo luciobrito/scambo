@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-
+using ScamboApi.Services;
+using System.IO;
+using System.Text;
 namespace ScamboApi.Controllers;
 
 [ApiController]
@@ -7,10 +9,11 @@ namespace ScamboApi.Controllers;
 public class WeatherForecastController : ControllerBase
 {
     private readonly ScamboContext _db;
-
-    public WeatherForecastController(ScamboContext db)
+    private readonly IServicoArmazenamento _armazenamento;
+    public WeatherForecastController(ScamboContext db, IServicoArmazenamento armazenamento)
     {
         _db = db;
+        _armazenamento = armazenamento;
     }
     private static readonly string[] Summaries =
     [
@@ -32,5 +35,17 @@ public class WeatherForecastController : ControllerBase
     public string Conexao()
     {
         return _db.Database.CanConnect().ToString();
+    }
+    [HttpPost("arquivo")]
+    public string arquivo(IFormFile file)
+    {   
+        _armazenamento.EnviarArquivo(file);
+        return "arquivo";
+    }
+    [HttpPost("arquivos")]
+    public string Arquivos(IFormFileCollection file)
+    {
+        file.ToList().ForEach(f => {_armazenamento.EnviarArquivo(f);});
+        return "arquivos";
     }
 }
