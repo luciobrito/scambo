@@ -2,6 +2,7 @@ using System;
 using System.Reflection.Metadata;
 using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace ScamboApi.Services;
 
@@ -21,6 +22,8 @@ public class ServicoArmazenamento : IServicoArmazenamento
             arquivo.CopyTo(memoryStream);
             memoryStream.Position = 0;
             BlobClient blob = _blobContainerClient.GetBlobClient(GerarNomeUnicoArquivo(arquivo));
+            //Correção necessária: especificar header como arquivo de imagem, 
+            // na azure está chegando como octet
             blob.Upload(memoryStream);
         }
     }
@@ -36,5 +39,13 @@ public class ServicoArmazenamento : IServicoArmazenamento
     public Response BaixarArquivo(string caminhoArquivo)
     {
         return new BlobClient(new Uri(caminhoArquivo)).DownloadTo("");
+    }
+    public Response<BlobDownloadStreamingResult> RetornarArquivo(string caminhoArquivo)
+    {
+        var blobClient = _blobContainerClient.GetBlobClient(caminhoArquivo);
+        
+        if(!blobClient.Exists()) throw new FileNotFoundException();
+        var downloadInfo = blobClient.DownloadStreaming();
+        return downloadInfo;
     }
 }
