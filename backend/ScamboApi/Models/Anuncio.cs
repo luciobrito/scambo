@@ -1,4 +1,4 @@
-namespace ScamboApi.Controllers
+namespace ScamboApi.Models
 {
     public class Anuncio
     {
