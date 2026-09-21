@@ -1,6 +1,6 @@
 namespace ScamboApi.Models
 {
-    public class usuarios
+    public class Usuarios
     {
         public int idUsuario { get; set; }
         public string nome { get; set; }

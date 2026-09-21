@@ -1,6 +1,6 @@
 namespace ScamboApi.Models
 {
-    public class chat
+    public class Chat
     {
         public int idChat { get; set; }
         public string conteudo { get; set; }

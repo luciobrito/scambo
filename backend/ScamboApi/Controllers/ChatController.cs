@@ -12,7 +12,7 @@ public class ChatController : ControllerBase
         return Ok($"Mensagens da conversa com ID {idConversa}");
     }
     [HttpPost("enviar")]
-    public IActionResult EnviarMensagem([FromBody] chat novaMensagem)
+    public IActionResult EnviarMensagem([FromBody] Chat novaMensagem)
     {
         return Created("", novaMensagem);
     }

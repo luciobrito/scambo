@@ -16,12 +16,7 @@ public class UsuariosController : ControllerBase
     {
         return Ok($"Usuário com ID {id} encontrado");
     }
-    [HttpGet("{id}")]
-    public IActionResult ObterPorID(int id)
-    {
-        return Ok($"Usuário com ID {id} encontrado");
-    }
-
+  
     [HttpPost]
     public IActionResult CriarUsuario([FromBody] Usuarios novoUsuario)
     {
@@ -35,6 +30,6 @@ public class UsuariosController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult ExcluirUsuario(int id)
     {
-        return Ok($"Usuário com ID {id} excluído");
+        return NoContent();
     }
 }
