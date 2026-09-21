@@ -17,7 +17,7 @@ public class AnuncioController : ControllerBase
         return Ok($"Detalhes do anuncio ID {id}");
     }
     [HttpPost]
-    public IactionResult CriarAnuncio([FromBody] Anuncio novoAnuncio)
+    public IActionResult CriarAnuncio([FromBody] Anuncio novoAnuncio)
     {
         return Created("", novoAnuncio);
     }
