@@ -20,5 +20,11 @@ namespace ScamboApi.Controllers
             string contentType = resultado.Value.Details.ContentType;
             return File(resultado.Value.Content, contentType);
         }
+        [HttpPost]
+        public IActionResult EnviarImagem(IFormFile arquivo)
+        {
+            _servicoArmazenamento.EnviarArquivo(arquivo);
+            return Created();
+        }
     }
 }

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router"
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Cadastro/Cadastro";
+import NovoItem from "./pages/NovoItem/NovoItem";
 
 export const roteador = createBrowserRouter([
     {
@@ -15,5 +16,13 @@ export const roteador = createBrowserRouter([
     {
         path:"/cadastro",
         element: <Cadastro/>
+    },
+    {
+        path: "item",
+        children:[
+            {path:"novo",
+                element: <NovoItem/>
+            }
+        ]
     }
 ]);
