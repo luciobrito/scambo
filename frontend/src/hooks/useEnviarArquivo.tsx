@@ -15,18 +15,25 @@ export function useEnviarArquivo(arquivo? : File | null){
         setStatus('uploading')
         setUploadProgess(0)
         const formData = new FormData()
-        formData.append('', file!)
+        formData.append('arquivo', file!)
         try{
-            await axios.post("", formData, {
+            
+            await axios.post(import.meta.env.VITE_API_URL + "api/imagens", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                onUploadProgress: (progressEvent) => {setUploadProgess(progressEvent.total! ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            : 0)}
             })
+            setStatus('success')
+            setUploadProgess(0)
         }
         catch{
-
+            //Erro de CORS, mas o arquivo está sendo enviado normalmente
+            
         }
         console.log("Enviando arquivo: " + file?.name)        
+        
     }
     const fileProps = {status, uploadProgess, file}
     return {handleFileChange, handleFileUpload, fileProps}

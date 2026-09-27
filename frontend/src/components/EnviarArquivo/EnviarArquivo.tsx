@@ -7,5 +7,7 @@ export default function EnviarArquivo(){
         <input type="file" name="" onChange={handleFileChange} />
         <p>{fileProps.file?.name}</p>
         <button onClick={handleFileUpload}>Enviar</button>
+        <p>Status: {fileProps.status}</p>
+        <p>Progresso upload: {fileProps.uploadProgess}%</p>
     </div>
 }
