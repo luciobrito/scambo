@@ -4,7 +4,7 @@ public static class CORSPolicy
     {
         service.AddCors(options => 
         options.AddDefaultPolicy(policy => 
-            policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod()
+            policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
             )
         );
     }
