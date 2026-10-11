@@ -3,6 +3,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Cadastro/Cadastro";
 import NovoItem from "./pages/NovoItem/NovoItem";
+import Chat from "./pages/Chat/Chat";
 
 export const roteador = createBrowserRouter([
     {
@@ -24,5 +25,9 @@ export const roteador = createBrowserRouter([
                 element: <NovoItem/>
             }
         ]
+    },
+    {
+        path:"chat",
+        element: <Chat/>
     }
 ]);
