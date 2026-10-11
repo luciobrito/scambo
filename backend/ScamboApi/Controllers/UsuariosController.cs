@@ -18,12 +18,12 @@ public class UsuariosController : ControllerBase
     }
   
     [HttpPost]
-    public IActionResult CriarUsuario([FromBody] Usuarios novoUsuario)
+    public IActionResult CriarUsuario([FromBody] Usuario novoUsuario)
     {
         return Created("", novoUsuario);
     }
     [HttpPut("{id}")]
-    public IActionResult AtualizarUsuario(int id, [FromBody] Usuarios usuarioAtualizado)
+    public IActionResult AtualizarUsuario(int id, [FromBody] Usuario usuarioAtualizado)
     {
         return Ok($"Usuário com ID {id} atualizado");
     }

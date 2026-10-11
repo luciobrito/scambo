@@ -2,13 +2,13 @@ namespace ScamboApi.Models
 {
     public class Anuncio
     {
-        public int idAnuncio { get; set; }
-        public string titulo { get; set; }
-        public string descricao { get; set; }
-        public List<string> fotoUrlAnuncio { get; set; }
-        public string estadoConservacao { get; set; }
-        public string modalidade { get; set; }
-        public DateTime dataPublicacao { get; set; }
-        public string status { get; set; }
+        public int Id { get; set; }
+        public string Titulo { get; set; }
+        public string Descricao { get; set; }
+        //public List<string> FotoUrlAnuncio { get; set; }
+        public string EstadoConservacao { get; set; }
+        public string Modalidade { get; set; }
+        public DateTime DataPublicacao { get; set; }
+        public string Status { get; set; }
     }
 }
