@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ScamboApi.DTOs;
 using ScamboApi.Models;
 namespace ScamboApi.Controllers;
 
@@ -6,6 +7,11 @@ namespace ScamboApi.Controllers;
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
+    private readonly ScamboContext _db;
+    public UsuariosController(ScamboContext db)
+    {
+        _db = db;
+    }
     [HttpGet]
     public IActionResult ObterTodos()
     {
@@ -18,8 +24,11 @@ public class UsuariosController : ControllerBase
     }
   
     [HttpPost]
-    public IActionResult CriarUsuario([FromBody] Usuario novoUsuario)
+    public IActionResult CriarUsuario([FromBody] UsuarioRegistroDTO novoUsuario)
     {
+        Usuario usuario = new Usuario(novoUsuario);
+        _db.Usuarios.Add(usuario);
+        _db.SaveChanges();
         return Created("", novoUsuario);
     }
     [HttpPut("{id}")]

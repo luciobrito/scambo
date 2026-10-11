@@ -1,3 +1,5 @@
+using ScamboApi.DTOs;
+
 namespace ScamboApi.Models
 {
     public class Usuario
@@ -10,5 +12,16 @@ namespace ScamboApi.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string TipoUsuario { get; set; }
+        public Usuario()
+        {
+            
+        }
+        public Usuario(UsuarioRegistroDTO usuarioRegistroDTO)
+        {
+            Nome = usuarioRegistroDTO.Nome;
+            Senha = usuarioRegistroDTO.Senha;
+            Email = usuarioRegistroDTO.Email;
+            TipoUsuario = "comum";
+        }
     }
 }
