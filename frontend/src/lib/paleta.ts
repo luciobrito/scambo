@@ -1,4 +1,4 @@
-export const pallete = {
+export const cores = {
   palmLeaf: "#8b9474",
   sageGreen: "#6cae75",
   mutedOlive: "#8bbd8b",
@@ -10,7 +10,7 @@ export const pallete = {
   shell: "#dde3cc",
 };
 
-export const font = {
+export const fontes = {
   serif: "'Fraunces', serif",
   sans: "'Outfit', sans-serif",
 };
