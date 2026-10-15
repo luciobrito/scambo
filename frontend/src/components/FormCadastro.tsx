@@ -50,7 +50,7 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
                     <span style={{ color: cores.sageGreen, fontWeight: 600 }}>Política de Privacidade</span>
                 </p>
             </div>
-            <div className={isDesktop ? styles.divBtnLogin1 : styles.divBtnLogin2}>
+            <div className={isDesktop ? styles.divBotoes1 : styles.divBotoes2}>
                 {isDesktop && (
                 <button onClick={() => navigate("/login")}
                     className={styles.btn}

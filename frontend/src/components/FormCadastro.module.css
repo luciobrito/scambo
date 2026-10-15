@@ -32,12 +32,12 @@
   transition-duration: 150ms;
 }
 
-.divBtnLogin1 {
+.divBotoes1 {
     display: flex;
     gap: 3rem;
 }
 
-.divBtnLogin2 {
+.divBotoes2 {
     display: flex;
     flex-direction: column;
     gap: 3rem;
