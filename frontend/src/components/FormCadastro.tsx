@@ -14,7 +14,7 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
-    const [agreed, setAgreed] = useState(true);
+    const [agreed, setAgreed] = useState(false);
     const form = (
         <>
             <div className={isDesktop ? styles.gridForms1 : styles.gridForms2}>
@@ -38,10 +38,10 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
                         <path d="M20 6 9 17l-5-5" />
                     </svg>} />
             </div>
-            <div className={styles.divBotaoDireitos}>
+            <div className={styles.divDireitos}>
                 <button onClick={() => setAgreed(!agreed)}
-                    className={styles.divBotaoDireitos}
-                    style={{ background: agreed ? cores.sageGreen : "transparent", border: agreed ? "none" : `2px solid ${cores.drySage}` }}>
+                    className={styles.btnTermos}
+                    style={{  background: agreed ? cores.sageGreen : "transparent", border: agreed ? "none" : `2px solid ${cores.drySage}` }}>
                     {agreed && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12" /></svg>}
                 </button>
                 <p style={{ fontFamily: fontes.sans, fontSize: 12, color: cores.palmLeaf, lineHeight: 1.6 }}>
@@ -58,7 +58,10 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
                     Já tenho conta
                 </button>
                 )}
-                <button onClick={() => navigate("/app/products")}
+                <button onClick={() => {
+                    console.log("clicou2");
+                    navigate("/app/products")
+                }}
                 className={styles.btn}
                 style={{ fontFamily: fontes.sans, fontSize: 15, background: cores.sandyBrown, color: "#fff", border: "none", cursor: "pointer", boxShadow: `0 6px 20px rgba(245,166,91,0.45)` }}>
                 Criar conta
@@ -70,3 +73,4 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
 
     return form;
 }
+
