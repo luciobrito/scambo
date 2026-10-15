@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { cores, fontes } from "../../lib/paleta";
-import { ScamboLogo } from "../../components/ScamboLogo";
+import { ScamboLogo } from "../../components/LogoScambo";
 import { useIsDesktop } from "../../hooks/useIsDesktop";
 import styles from "./Cadastro.module.css";
 import FormCadastro from "../../components/FormCadastro";
