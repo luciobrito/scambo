@@ -1,23 +1,33 @@
 import { useState } from "react";
 import { InputField } from "./InputField";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate, type NavigateFunction } from "react-router";
 import { fontes, cores } from "../lib/paleta";
 import styles from "./FormCadastro.module.css"
+import { formToJSON } from "axios";
 
 interface FormCadastroProps {
     isDesktop: boolean
 };
 
 export default function FormCadastro({isDesktop}: FormCadastroProps) {
+   
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
     const [agreed, setAgreed] = useState(false);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        submitForm(navigate, name, email, password, confirm, agreed);
+    }
+
     const form = (
-        <>
+        
+        <form id="formCadastro" action="" onSubmit={handleSubmit} className={styles.mainFormsStyle}>
             <div className={isDesktop ? styles.gridForms1 : styles.gridForms2}>
+                
                 <InputField label="Nome completo" placeholder="Seu nome" value={name} onChange={setName}
                     icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={cores.palmLeaf} strokeWidth="2" strokeLinecap="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -58,19 +68,31 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
                     Já tenho conta
                 </button>
                 )}
-                <button onClick={() => {
-                    console.log("clicou2");
-                    navigate("/app/products")
-                }}
-                className={styles.btn}
-                style={{ fontFamily: fontes.sans, fontSize: 15, background: cores.sandyBrown, color: "#fff", border: "none", cursor: "pointer", boxShadow: `0 6px 20px rgba(245,166,91,0.45)` }}>
+                <button type="submit"  className={styles.btn} style={{ fontFamily: fontes.sans, fontSize: 15, background: cores.sandyBrown, color: "#fff", border: "none", cursor: "pointer", boxShadow: `0 6px 20px rgba(245,166,91,0.45)` }}>
                 Criar conta
                 </button>
             </div>
             
-        </>
+        </form>
     );
 
     return form;
 }
+
+function submitForm(navigate: NavigateFunction ,nome: string, email: string, password: string, confPassword: string, termos: boolean) {
+    if(validarCampos(nome, email, password, confPassword, termos)){
+        navigate("/");
+    }
+    
+}
+
+function validarCampos(nome: string, email: string, password: string, confPassword: string, termos: boolean){
+    const formValido = (!(isCampoEmpty(nome) || isCampoEmpty(email) || isCampoEmpty(password) || isCampoEmpty(confPassword)) && termos)
+    return formValido;
+}
+
+function isCampoEmpty(input: string){
+    return (input.trim().length == 0);
+}
+
 

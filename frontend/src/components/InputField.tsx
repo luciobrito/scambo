@@ -3,9 +3,15 @@ import { cores, fontes } from "../lib/paleta";
 export function InputField({
   label, type = "text", placeholder, value, onChange, icon,
 }: {
-  label: string; type?: string; placeholder: string; value: string;
-  onChange: (v: string) => void; icon?: React.ReactNode;
-}) {
+  label: string; 
+  type?: string; 
+  placeholder: string; 
+  value: string;
+  onChange: (v: string) => void; 
+  icon?: React.ReactNode;
+  }) {
+
+  
   return (
     <div className="flex flex-col gap-1.5">
       <label style={{ fontFamily: fontes.sans, fontSize: 11, fontWeight: 700, color: cores.palmLeaf, letterSpacing: "0.06em", textTransform: "uppercase" }}>
@@ -21,7 +27,7 @@ export function InputField({
           type={type}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {onChange(e.target.value)}}
           style={{
             fontFamily: fontes.sans,
             fontSize: 14,
@@ -42,3 +48,4 @@ export function InputField({
     </div>
   );
 }
+
