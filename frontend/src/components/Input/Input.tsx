@@ -6,7 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>{
 }
 
 export default function Input({titulo, icone, ...rest}:InputProps){
-    return             <div className="input-field">
+    return  <div className="input-field">
               <label htmlFor="email" className="input-label">
                 {titulo}
               </label>

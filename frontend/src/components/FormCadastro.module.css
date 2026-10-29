@@ -1,0 +1,119 @@
+.mainFormsStyle {
+    display: flex;
+    flex-direction: column; 
+    gap: 1rem;
+}
+.gridForms1 {
+    display: grid;                            
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 3rem;  
+}
+
+.gridForms2 {
+    display: flex;         
+    flex-direction: column; 
+    gap: 1rem; 
+}
+
+
+.divDireitos {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+
+}
+
+.btnTermos {
+  flex-shrink: 0;
+  width: 1.25rem;        
+  height: 1.25rem;        
+  border-radius: 0.375rem; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.125rem;  
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.divBotoes1 {
+    display: flex;
+    gap: 3rem;
+}
+
+.divBotoes2 {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+
+.btn {
+
+  flex: 1 1 0%;
+  
+
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  
+
+  border-radius: 1rem;
+  
+
+  font-weight: 700;
+  
+
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+
+
+.formCustom {
+    max-width: fit-content;
+    padding: 3rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin: 4rem;
+    margin-top: 4rem;
+    vertical-align: middle;
+    border: 2px solid;
+    border-radius: 0.8rem;
+    font-size: 1.1rem;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.formCustom div {
+    padding: 0.3rem;
+}
+
+.formCustom label {
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.formCustom input {
+    padding: 0.2rem;
+    margin: 0.2rem;
+    border-radius: 4px;
+}
+
+.formCustom button {
+    font-size: 1rem;
+    max-width: 35rem;
+    max-height: 10rem;
+    padding: 0.2rem;
+    margin: 0.4rem;
+    margin-top: 2rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    border: 2x solid;
+    border-radius: 4px;
+    grid-column: span 2;
+}
