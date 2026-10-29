@@ -6,6 +6,8 @@ namespace ScamboApi.Controllers;
 [Route("api/[controller]")]
 public class AnuncioController : ControllerBase
 {
+    // TODO(front): a tela /app/products já consome este endpoint. Deve retornar um array de
+    // anúncios (hoje retorna texto). Formato em docs/CONTRATO_API.md, seção "GET api/anuncio".
     [HttpGet]
     public IActionResult ObterTodos()
     {

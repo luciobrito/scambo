@@ -4,7 +4,7 @@ import "./Login.css";
 import PainelDesktop from "./PainelDesktop";
 import MobileHero from "./MobileHero";
 import Input from "../../components/Input/Input";
-import { IconeEmail } from "../../components/Icones/IconesInput";
+import { IconeCadeado, IconeEmail } from "../../components/Icones/IconesInput";
 import SocialIcons from "./SocialIcons";
 import { type LoginState } from "./LoginState";
 
@@ -39,8 +39,8 @@ export default function LoginScreen() {
               <h2 className="login-title">Bem-vindo de volta</h2>
               <p className="login-subtitle">Acesse sua conta para continuar</p>
             </div>
-            <Input titulo="E-mail" name="email" icone={<IconeEmail/>} value={loginState.email} onChange={handleChange}/>
-            <Input titulo="Senha" name="senha" value={loginState.senha} onChange={handleChange}/>
+            <Input titulo="E-mail" name="email" icone={<IconeEmail/>} placeholder="seu@email.com" value={loginState.email} onChange={handleChange}/>
+            <Input titulo="Senha" name="senha" icone={<IconeCadeado/>} placeholder="Digite sua senha" value={loginState.senha} onChange={handleChange}/>
 
             {/* Forgot password */}
             <div className="forgot-password">
