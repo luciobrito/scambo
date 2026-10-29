@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { cores, fontes } from "../../lib/paleta";
+import { cores, fontes } from "../../lib/pallete";
 import { ScamboLogo } from "../../components/LogoScambo";
 import { useIsDesktop } from "../../hooks/useIsDesktop";
 import styles from "./Cadastro.module.css";

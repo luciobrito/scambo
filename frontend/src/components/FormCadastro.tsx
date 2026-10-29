@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { InputField } from "./InputField";
 import { Navigate, useNavigate, type NavigateFunction } from "react-router";
-import { fontes, cores } from "../lib/paleta";
+import { fontes, cores } from "../lib/pallete";
 import styles from "./FormCadastro.module.css"
 import { formToJSON } from "axios";
 

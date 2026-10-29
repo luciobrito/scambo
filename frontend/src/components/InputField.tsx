@@ -1,4 +1,4 @@
-import { cores, fontes } from "../lib/paleta";
+import { cores, fontes } from "../lib/pallete";
 
 export function InputField({
   label, type = "text", placeholder, value, onChange, icon,

@@ -11,24 +11,12 @@ import Conversas from "./pages/Conversas/Conversas";
 
 export const roteador = createBrowserRouter([
     {
-        path:"/",
-        element: <Home/>
-    },
-    {
         path:"/login",
         element: <Login/>
     },
     {
         path:"/cadastro",
         element: <Cadastro/>
-    },
-    {
-        path: "item",
-        children:[
-            {path:"novo",
-                element: <NovoItem/>
-            }
-        ]
     },
     {
         path:"chat",

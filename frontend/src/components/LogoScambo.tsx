@@ -1,4 +1,4 @@
-import { cores, fontes } from "../lib/paleta";
+import { cores, fontes } from "../lib/pallete";
 
 export function ScamboLogo({ size = 32, color = cores.sageGreen }: { size?: number; color?: string }) {
   return (
