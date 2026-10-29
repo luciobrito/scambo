@@ -8,10 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 var storageConnectionString = "";
 // Add services to the container.
-
+builder.Services.AddCorsPolicy();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<ScamboContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddScoped<IServicoArmazenamento>(provider =>
 {
@@ -27,9 +28,10 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthorization();
-
+app.UseCors();
 app.MapControllers();
+app.MapHub<HubMensagens>("/hubmensagens");
 
 app.Run();
