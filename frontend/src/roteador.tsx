@@ -4,6 +4,10 @@ import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Cadastro/Cadastro";
 import NovoItem from "./pages/NovoItem/NovoItem";
 import Chat from "./pages/Chat/Chat";
+import Produtos from "./pages/Produtos/Produtos";
+import LayoutApp from "./components/LayoutApp/LayoutApp";
+import Perfil from "./pages/Perfil/Perfil";
+import Conversas from "./pages/Conversas/Conversas";
 
 export const roteador = createBrowserRouter([
     {
@@ -29,5 +33,20 @@ export const roteador = createBrowserRouter([
     {
         path:"chat",
         element: <Chat/>
+    },
+    {
+        path: "app",
+        element: <LayoutApp/>,
+        children:[
+            {path:"products",
+                element: <Produtos/>
+            },
+            {path:"profile",
+                element: <Perfil/>
+            },
+            {path:"chat",
+                element: <Conversas/>
+            }
+        ]
     }
 ]);
