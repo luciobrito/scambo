@@ -6,6 +6,16 @@ import ProdutoCard from "./ProdutoCard";
 import { IconeBusca, IconeSino } from "./IconesProdutos";
 import styles from "./Produtos.module.css";
 
+/*
+ * Tela /app/products: feed de itens disponíveis para scambo.
+ *
+ * Integração com o back-end
+ * - Dados: GET api/anuncio, via useProdutos -> services/anuncios.ts (API real, sem mock).
+ * - Busca e categorias filtram no front a lista já carregada (ver TODO em services/anuncios.ts).
+ * - Estados tratados: carregando, erro com "Tentar novamente" e lista vazia.
+ * - Pendências do back-end: iniciar o scambo e notificações (TODOs abaixo).
+ */
+
 type Filtro = Categoria | "Todos";
 const FILTROS: Filtro[] = ["Todos", ...CATEGORIAS];
 
@@ -64,6 +74,7 @@ export default function Produtos() {
                         onClick={() => setBuscaAberta(aberta => !aberta)}>
                         <IconeBusca />
                     </button>
+                    {/* TODO(back-end): ainda não há endpoint de notificações; o botão fica desabilitado. */}
                     <button type="button" className={styles.botaoIcone} disabled
                         aria-label="Notificações (em breve)" title="Notificações em breve">
                         <IconeSino />
@@ -138,7 +149,9 @@ export default function Produtos() {
                     </div>
                     <div className={styles.confirmacaoAcoes}>
                         <button type="button" className={styles.botaoCancelar} onClick={() => setEscolhido(null)}>Cancelar</button>
-                        {/* O fluxo de proposta de scambo ainda não existe no backend/chat; o botão fica desabilitado até lá. */}
+                        {/* TODO(back-end): POST api/chat/conversas { anuncioId } -> 201/200 Conversa
+                            (docs/CONTRATO_API.md). Com a resposta, navegar para /app/chat abrindo a
+                            conversa retornada. Até o endpoint existir, o botão fica desabilitado. */}
                         <button type="button" className={styles.botaoConfirmar} disabled title="Envio de proposta de scambo em breve">
                             Confirmar Scambo
                         </button>

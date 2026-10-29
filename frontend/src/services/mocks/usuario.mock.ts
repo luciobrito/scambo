@@ -3,7 +3,8 @@ import type { Perfil, Usuario } from "../usuario";
 /*
  * Dados provisórios usados enquanto o back-end de usuário/perfil não existe.
  * Seguem exatamente os tipos de ../usuario.ts (o contrato com a API).
- * Remover este arquivo quando os endpoints estiverem prontos.
+ * Usados enquanto VITE_MOCK_USUARIO não for "false" no frontend/.env (services/api.ts).
+ * Remover este arquivo quando os endpoints estiverem prontos e integrados.
  */
 
 export const usuarioLogadoMock: Usuario = {

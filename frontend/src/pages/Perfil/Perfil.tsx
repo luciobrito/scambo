@@ -1,12 +1,24 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import useCarregarDados from "../../hooks/useCarregarDados";
+import { ErroApi } from "../../services/api";
 import { atualizarBio, mesAno, obterPerfil, type Perfil as DadosPerfil } from "../../services/usuario";
 import { variaveisPaleta } from "../../pallete";
 import { IconeEngrenagem, IconeMais, IconeSair, IconeSeta } from "./IconesPerfil";
 import styles from "./Perfil.module.css";
 
-// Itens de configuração ainda sem tela própria.
+/*
+ * Tela /app/profile: dados, histórico e configurações do usuário logado.
+ *
+ * Integração com o back-end (services/usuario.ts; mock ligado até VITE_MOCK_USUARIO=false)
+ * - Dados: GET api/usuarios/me/perfil (cartão, estatísticas, scambo ativo, histórico, conquistas).
+ * - "Sobre mim": PATCH api/usuarios/me { bio }. A mensagem de um 400 aparece abaixo do campo.
+ * - "Sair": depende da autenticação (TODO abaixo).
+ * - Configurações: ainda sem endpoints; os itens ficam desabilitados.
+ */
+
+// TODO(back-end): itens sem tela nem endpoint definidos (preferências de notificação,
+// privacidade e localização). Ficam desabilitados até existirem.
 const CONFIGURACOES = [
     { icone: "🔔", rotulo: "Notificações" },
     { icone: "🔒", rotulo: "Privacidade" },
@@ -53,17 +65,17 @@ function SobreMim({ bioInicial }: { bioInicial: string }) {
     const [editando, setEditando] = useState(false);
     const [rascunho, setRascunho] = useState(bioInicial);
     const [salvando, setSalvando] = useState(false);
-    const [erro, setErro] = useState(false);
+    const [erro, setErro] = useState<string | null>(null);
 
     async function salvar() {
         setSalvando(true);
-        setErro(false);
+        setErro(null);
         try {
             await atualizarBio(rascunho.trim());
             setBio(rascunho.trim());
             setEditando(false);
-        } catch {
-            setErro(true);
+        } catch (e) {
+            setErro(e instanceof ErroApi ? e.message : "Não foi possível salvar. Tente novamente.");
         } finally {
             setSalvando(false);
         }
@@ -81,7 +93,7 @@ function SobreMim({ bioInicial }: { bioInicial: string }) {
                 ? <>
                     <textarea className={styles.bioCampo} value={rascunho} maxLength={300} rows={4}
                         aria-label="Sobre mim" onChange={e => setRascunho(e.target.value)} />
-                    {erro && <p className={styles.erroTexto} role="alert">Não foi possível salvar. Tente novamente.</p>}
+                    {erro && <p className={styles.erroTexto} role="alert">{erro}</p>}
                     <div className={styles.bioAcoes}>
                         <button type="button" className={styles.botaoSecundario} onClick={() => setEditando(false)} disabled={salvando}>Cancelar</button>
                         <button type="button" className={styles.botaoPrimario} onClick={salvar} disabled={salvando}>
@@ -99,7 +111,8 @@ export default function Perfil() {
     const { estado, recarregar } = useCarregarDados(obterPerfil);
     const configuracoesRef = useRef<HTMLElement>(null);
 
-    // TODO(back-end): limpar a sessão/token quando a autenticação existir.
+    // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
+    // (ex.: POST api/auth/logout ou descartar o token) e limpar dados do usuário em memória.
     const sair = () => navigate("/login");
 
     return (

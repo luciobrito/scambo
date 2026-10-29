@@ -1,9 +1,16 @@
-import axios from "axios";
+import { api, ErroApi } from "./api";
+
+/*
+ * Serviço do feed de anúncios (tela /app/products).
+ *
+ * Já usa a API real: GET api/anuncio (AnuncioController.ObterTodos). Não tem mock.
+ * Formato esperado em docs/CONTRATO_API.md, seção "GET api/anuncio".
+ */
 
 export const CATEGORIAS = ["Roupas", "Eletrônicos", "Livros", "Materiais", "Outros"] as const;
 export type Categoria = (typeof CATEGORIAS)[number];
 
-// Formato retornado por GET api/anuncio (Models/Anuncio.cs, serializado em camelCase).
+// Formato retornado por GET api/anuncio (Models/Anuncio.cs serializado em camelCase).
 export interface AnuncioApi {
     id: number,
     titulo: string,
@@ -42,6 +49,7 @@ function paraCategoria(valor?: string): Categoria {
 function paraImagemUrl(caminho?: string) {
     if (!caminho) return undefined;
     if (/^https?:\/\//.test(caminho)) return caminho;
+    // Nome de arquivo do blob: servido por GET api/imagens/{caminho} (ImagensController).
     return import.meta.env.VITE_API_URL + "api/imagens/" + encodeURIComponent(caminho);
 }
 
@@ -60,11 +68,15 @@ export function paraProduto(anuncio: AnuncioApi): Produto {
 }
 
 export async function listarAnuncios(signal?: AbortSignal): Promise<Produto[]> {
-    const resposta = await axios.get<unknown>(import.meta.env.VITE_API_URL + "api/anuncio", { signal });
-    if (!Array.isArray(resposta.data)) {
-        throw new Error("A API de anúncios retornou um formato inesperado.");
+    // TODO(back-end): hoje busca e filtro por categoria são feitos no front sobre a lista inteira.
+    // Quando o volume crescer, aceitar filtros e paginação na API
+    // (ex.: GET api/anuncio?busca=&categoria=&pagina=&tamanho=) e repassá-los aqui.
+    const { data } = await api.get<unknown>("api/anuncio", { signal });
+    // Protege a tela enquanto o endpoint devolve texto em vez de lista.
+    if (!Array.isArray(data)) {
+        throw new ErroApi("A API de anúncios retornou um formato inesperado.");
     }
-    return (resposta.data as AnuncioApi[]).map(paraProduto);
+    return (data as AnuncioApi[]).map(paraProduto);
 }
 
 export function tempoDesde(data: Date, agora = new Date()) {

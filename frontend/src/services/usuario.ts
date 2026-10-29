@@ -1,12 +1,16 @@
+import { api, usarMock } from "./api";
 import { perfilMock, usuarioLogadoMock } from "./mocks/usuario.mock";
 
 /*
- * Serviço do usuário logado e do perfil.
+ * Serviço do usuário logado e do perfil (Sidebar e tela /app/profile).
  *
- * O back-end de autenticação/perfil ainda não existe: por enquanto as funções
- * retornam os dados de ./mocks/usuario.mock.ts. Quando os endpoints existirem,
- * basta trocar o corpo de cada função pela chamada axios indicada no TODO —
- * as telas não precisam mudar. O formato esperado está em docs/CONTRATO_API.md (na raiz do repositório).
+ * Situação: os endpoints ainda não existem no back-end, então o padrão é usar os dados de
+ * ./mocks/usuario.mock.ts. As chamadas reais já estão implementadas abaixo; para usá-las,
+ * defina VITE_MOCK_USUARIO=false no frontend/.env. As telas não precisam mudar.
+ *
+ * Todos os endpoints usam "me": o back-end identifica o usuário pela sessão/token
+ * (depende da autenticação, docs/GUIA_BACKEND.md, etapa 2).
+ * Formatos em docs/CONTRATO_API.md; os tipos abaixo são a referência do contrato.
  */
 
 export interface Usuario {
@@ -57,22 +61,29 @@ export interface Perfil {
     conquistas: Conquista[]
 }
 
+// TODO(back-end): GET api/usuarios/me -> 200 Usuario | 401 sem sessão. Nunca incluir senha/e-mail.
 export async function obterUsuarioLogado(): Promise<Usuario> {
-    // TODO(back-end): GET api/usuarios/me
-    // return (await axios.get<Usuario>(import.meta.env.VITE_API_URL + "api/usuarios/me")).data;
-    return usuarioLogadoMock;
+    if (usarMock.usuario) return usuarioLogadoMock;
+    const { data } = await api.get<Usuario>("api/usuarios/me");
+    return data;
 }
 
+// TODO(back-end): GET api/usuarios/me/perfil -> 200 Perfil | 401.
+// Estatísticas, histórico e conquistas vêm prontos; o front só exibe.
 export async function obterPerfil(): Promise<Perfil> {
-    // TODO(back-end): GET api/usuarios/me/perfil
-    // return (await axios.get<Perfil>(import.meta.env.VITE_API_URL + "api/usuarios/me/perfil")).data;
-    return perfilMock;
+    if (usarMock.usuario) return perfilMock;
+    const { data } = await api.get<Perfil>("api/usuarios/me/perfil");
+    return data;
 }
 
+// TODO(back-end): PATCH api/usuarios/me { bio } -> 204 | 400 { mensagem } (ex.: mais de 300 caracteres).
+// A mensagem do 400 é exibida abaixo do campo na tela de Perfil.
 export async function atualizarBio(bio: string): Promise<void> {
-    // TODO(back-end): PATCH api/usuarios/me  { bio }
-    // await axios.patch(import.meta.env.VITE_API_URL + "api/usuarios/me", { bio });
-    usuarioLogadoMock.bio = bio;
+    if (usarMock.usuario) {
+        usuarioLogadoMock.bio = bio;
+        return;
+    }
+    await api.patch("api/usuarios/me", { bio });
 }
 
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];

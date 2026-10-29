@@ -15,15 +15,23 @@ como o front funciona.
 
 As telas nunca chamam a API diretamente. Todas as chamadas passam por `frontend/src/services/`:
 
-| Arquivo | Telas | Situação |
-| --- | --- | --- |
-| `services/anuncios.ts` | Produtos (`/app/products`) | já chama a API de verdade |
-| `services/usuario.ts` | Sidebar e Perfil (`/app/profile`) | usa mock |
-| `services/chat.ts` | Chat (`/app/chat`) | usa mock |
+| Arquivo | Telas | Situação | Chave no `frontend/.env` |
+| --- | --- | --- | --- |
+| `services/api.ts` | todas | cliente HTTP único (URL base, timeout, erros, autenticação) | `VITE_API_URL` |
+| `services/anuncios.ts` | Produtos (`/app/products`) | já chama a API de verdade | — |
+| `services/usuario.ts` | Sidebar e Perfil (`/app/profile`) | usa mock | `VITE_MOCK_USUARIO` |
+| `services/chat.ts` | Chat (`/app/chat`) | usa mock | `VITE_MOCK_CHAT` |
 
-- Os dados provisórios ficam em `services/mocks/`, no mesmo formato do contrato.
-- Cada ponto que depende do back-end tem um comentário `TODO(back-end)` com a chamada
-  axios pronta, só comentada. Para listar todos:
+- **As chamadas reais já estão implementadas.** Para testar os seus endpoints nas telas, mude a
+  chave do módulo para `false` no `frontend/.env`; não é preciso editar código. Os dados de
+  exemplo ficam em `services/mocks/`, no mesmo formato do contrato.
+- **Erros:** o `services/api.ts` mostra ao usuário a `mensagem` do corpo de erro, quando houver
+  (`{ "mensagem": "..." }`). Sem ela, usa um texto padrão pelo status HTTP.
+- **Autenticação:** o lugar para enviar o token e tratar o `401` está reservado em
+  `services/api.ts`, com um `TODO(back-end)`.
+- **Cada tela** tem no topo um bloco "Integração com o back-end", com os endpoints que usa.
+- **Cada ponto** que depende do back-end tem um comentário `TODO(back-end)` com o endpoint,
+  as respostas esperadas e o comportamento da tela. Para listar todos:
 
   ```bash
   grep -rn "TODO(back-end)" frontend/src
@@ -36,8 +44,8 @@ As telas nunca chamam a API diretamente. Todas as chamadas passam por `frontend/
   grep -rn "TODO(front)" backend/ScamboApi
   ```
 
-Quando um endpoint ficar pronto, o front troca só o corpo da função no serviço; as telas
-não mudam.
+Quando os endpoints de um módulo ficarem prontos: mude a chave do `.env` para `false`, teste as
+telas e avise o front. Depois de integrado, o mock do módulo pode ser apagado.
 
 ## 2. Rodando o front-end junto com a API
 

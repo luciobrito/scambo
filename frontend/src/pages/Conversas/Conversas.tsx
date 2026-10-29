@@ -10,6 +10,17 @@ import DetalheConversa from "./DetalheConversa";
 import { IconeBusca, IconeNovaConversa } from "./IconesConversas";
 import styles from "./Conversas.module.css";
 
+/*
+ * Tela /app/chat: lista de conversas e conversa aberta.
+ *
+ * Integração com o back-end (services/chat.ts; mock ligado até VITE_MOCK_CHAT=false)
+ * - Lista: GET api/chat/conversas. A ordenação (mais recente primeiro) e a busca são feitas aqui.
+ * - Quem sou eu: GET api/usuarios/me, para decidir de que lado cada mensagem aparece.
+ * - Ao abrir uma conversa com não lidas: PUT api/chat/mensagens/{id}/visualizadas.
+ * - Mensagens, envio e tempo real ficam em DetalheConversa.tsx.
+ * - Uma conversa nova nasce do botão "Confirmar Scambo" da tela de Produtos (POST api/chat/conversas).
+ */
+
 function maisRecenteAntes(a: Conversa, b: Conversa) {
     return (b.ultimaMensagem?.dataHora ?? "").localeCompare(a.ultimaMensagem?.dataHora ?? "");
 }
@@ -48,6 +59,7 @@ export default function Conversas() {
         setSelecionadaId(conversa.id);
         setMostrandoChat(true);
         if (conversa.naoLidas > 0) {
+            // Atualiza a tela na hora; se a API falhar, o contador volta na próxima carga da lista.
             setLidas(atual => new Set(atual).add(conversa.id));
             marcarComoLida(conversa.id).catch(() => { });
         }

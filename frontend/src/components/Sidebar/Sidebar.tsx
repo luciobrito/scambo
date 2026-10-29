@@ -5,6 +5,14 @@ import { obterUsuarioLogado } from "../../services/usuario";
 import { IconeChat, IconeInicio, IconePerfil, IconeSair } from "./IconesSidebar";
 import styles from "./Sidebar.module.css";
 
+/*
+ * Navegação das telas /app (fixa à esquerda no desktop, barra inferior no mobile).
+ *
+ * Integração com o back-end
+ * - Rodapé: GET api/usuarios/me (services/usuario.ts; mock até VITE_MOCK_USUARIO=false).
+ * - Ícone de sair: depende da autenticação (TODO abaixo).
+ */
+
 interface ItemMenu {
     rotulo: string,
     icone: ReactElement,
@@ -23,7 +31,8 @@ export default function Sidebar() {
     const usuario = estado.status === 'sucesso' ? estado.dados : null;
     const navigate = useNavigate();
 
-    // TODO(back-end): limpar a sessão/token quando a autenticação existir.
+    // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
+    // (mesma regra do botão Sair da tela de Perfil).
     const sair = () => navigate("/login");
 
     return (

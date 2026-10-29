@@ -5,7 +5,8 @@ import { usuarioLogadoMock } from "./usuario.mock";
  * Dados provisórios usados enquanto o back-end do chat não existe.
  * Seguem exatamente os tipos de ../chat.ts (o contrato com a API).
  * As datas são relativas ao momento atual para a lista parecer recente.
- * Remover este arquivo quando os endpoints estiverem prontos.
+ * Usados enquanto VITE_MOCK_CHAT não for "false" no frontend/.env (services/api.ts).
+ * Remover este arquivo quando os endpoints estiverem prontos e integrados.
  */
 
 const EU = usuarioLogadoMock.id;

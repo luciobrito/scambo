@@ -5,6 +5,16 @@ import Avatar from "./Avatar";
 import { IconeEnviar, IconeImagem, IconeOpcoesHorizontal, IconeVoltar } from "./IconesConversas";
 import styles from "./Conversas.module.css";
 
+/*
+ * Conversa aberta: mensagens, envio e recebimento em tempo real.
+ *
+ * Integração com o back-end (services/chat.ts)
+ * - Histórico: GET api/chat/mensagens/{idConversa}.
+ * - Envio: POST api/chat/enviar. A mensagem só aparece depois da resposta 201, com o id do servidor.
+ * - Tempo real: assinarMensagens (SignalR). Mensagens repetidas são descartadas pelo id, então
+ *   o mesmo id precisa vir no REST e no evento do hub.
+ */
+
 interface DetalheConversaProps {
     conversa: Conversa,
     meuId: number,
@@ -74,6 +84,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                         {conversa.contato.online ? "online" : "visto há pouco"} · {conversa.anuncio.titulo}
                     </p>
                 </div>
+                {/* TODO(back-end): ações da conversa (ex.: concluir ou cancelar o scambo) ainda sem endpoint. */}
                 <button type="button" className={styles.botaoIcone} disabled aria-label="Mais opções (em breve)" title="Mais opções em breve">
                     <IconeOpcoesHorizontal />
                 </button>
@@ -116,6 +127,8 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
 
             {erroEnvio && <p className={styles.erroEnvio} role="alert">Não foi possível enviar a mensagem. Tente novamente.</p>}
             <form className={styles.compositor} onSubmit={enviar}>
+                {/* TODO(back-end): o upload já existe (POST api/imagens, ImagensController), mas falta
+                    associar a imagem à mensagem (ex.: campo imagemUrl em Mensagem). */}
                 <button type="button" className={styles.botaoIcone} disabled aria-label="Enviar imagem (em breve)" title="Envio de imagem em breve">
                     <IconeImagem />
                 </button>

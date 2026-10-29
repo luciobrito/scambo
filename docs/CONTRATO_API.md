@@ -7,6 +7,9 @@ sem mudanças nas telas.
 - Base: `VITE_API_URL` (ex.: `http://localhost:5209/`, com barra no final).
 - JSON em **camelCase** (padrão do ASP.NET Core / System.Text.Json).
 - Datas em **ISO 8601** (ex.: `"2025-01-15T00:00:00Z"`).
+- Erros: status HTTP adequado (400, 401, 403, 404, 409, 500) e, quando houver texto para o
+  usuário, corpo `{ "mensagem": "..." }`. O front exibe essa mensagem como está.
+- Nenhuma resposta inclui `senha`.
 - Os tipos TypeScript de referência estão nos arquivos indicados em cada seção.
 
 ## Situação atual
@@ -28,10 +31,9 @@ Atualizado em 28/10/2026. Ordem sugerida de implementação em `docs/GUIA_BACKEN
 | Marcar como lida | `PUT api/chat/mensagens/{idConversa}/visualizadas` | usando mock | a fazer (`ChatController`) |
 | Tempo real | SignalR `/hubmensagens` | preparado (`assinarMensagens`) | envia string para todos (`Services/HubMensagens.cs`) |
 
-Os dados provisórios ficam em `frontend/src/services/mocks/`. Para integrar um
-endpoint, troque o corpo da função correspondente em `frontend/src/services/usuario.ts`
-ou `frontend/src/services/chat.ts` pela chamada axios que já está comentada no
-`TODO(back-end)` e, quando nenhuma função usar mais o mock, apague o arquivo de mock.
+As chamadas reais já estão implementadas em `frontend/src/services/`. Enquanto os endpoints
+não existem, as telas usam os dados de exemplo de `frontend/src/services/mocks/`. Para usar a
+API real num módulo, defina `VITE_MOCK_USUARIO=false` ou `VITE_MOCK_CHAT=false` no `frontend/.env`.
 
 Os tipos TypeScript citados abaixo ficam em `frontend/src/services/`.
 
