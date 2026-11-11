@@ -4,6 +4,7 @@ import { assinarMensagens, enviarMensagem, horaCurta, listarMensagens, type Conv
 import Avatar from "./Avatar";
 import { IconeEnviar, IconeImagem, IconeOpcoesHorizontal, IconeVoltar } from "./IconesConversas";
 import styles from "./Conversas.module.css";
+import useHubMensangens from "../../hooks/useHubMensagens";
 
 /*
  * Conversa aberta: mensagens, envio e recebimento em tempo real.
@@ -35,6 +36,9 @@ function juntarMensagens(carregadas: Mensagem[], novas: Mensagem[]) {
 }
 
 export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }: DetalheConversaProps) {
+    
+    //const hubMensagens = useHubMensangens();
+    
     const carregar = useCallback(() => listarMensagens(conversa.id), [conversa.id]);
     const { estado, recarregar } = useCarregarDados(carregar);
     const [novas, setNovas] = useState<Mensagem[]>([]);
@@ -117,7 +121,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                     return (
                         <div key={m.id} className={`${styles.linhaMensagem} ${minha ? styles.linhaMinha : ""}`}>
                             <div className={`${styles.balao} ${minha ? styles.balaoMeu : styles.balaoOutro}`}>
-                                <p className={styles.balaoTexto}>{m.conteudo}</p>
+                                <p className={styles.balaoTexto}>buscar aqui</p>
                                 <p className={styles.balaoHora}>{horaCurta(m.dataHora)}</p>
                             </div>
                         </div>

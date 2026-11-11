@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ScamboApi.Services;
 public interface IMensagensClient
@@ -11,8 +12,17 @@ public interface IMensagensClient
 // Detalhes em docs/CONTRATO_API.md, seção "Tempo real".
 public class HubMensagens : Hub
 {
+    private readonly ScamboContext _db;
+    public HubMensagens(ScamboContext db)
+    {
+        _db = db;
+    }
+
+
+    [Authorize]
     public async Task EnviarMensagem(string mensagem)
     {
+        
         await Clients.All.SendAsync("ReceberMensagem", mensagem);
         
     }

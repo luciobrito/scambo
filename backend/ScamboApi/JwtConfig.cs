@@ -23,6 +23,18 @@ public static class JwtConfig
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
+            config.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];;
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         })
         ;
         
