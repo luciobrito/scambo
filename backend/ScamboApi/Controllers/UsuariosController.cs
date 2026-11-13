@@ -42,8 +42,8 @@ public class UsuariosController : ControllerBase
     [HttpGet]
     public IActionResult MeuUsuario()
     {
-        var user = User.Claims.Where(x => x.Type ==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-        Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Email == user);
+        var user = int.Parse (User.Claims.FirstOrDefault(x => x.Type ==ClaimTypes.NameIdentifier)?.Value ?? "0");
+        Usuario usuario = _db.Usuarios.Find(user);
         usuario.Senha = "";
         return Ok(usuario);
     }

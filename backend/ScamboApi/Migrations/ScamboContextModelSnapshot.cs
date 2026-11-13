@@ -25,6 +25,9 @@ namespace ScamboApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AnuncianteId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DataPublicacao")
                         .HasColumnType("datetime(6)");
 
@@ -49,6 +52,8 @@ namespace ScamboApi.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnuncianteId");
 
                     b.ToTable("Anuncios");
                 });
@@ -141,6 +146,17 @@ namespace ScamboApi.Migrations
                     b.ToTable("Usuarios");
                 });
 
+            modelBuilder.Entity("ScamboApi.Models.Anuncio", b =>
+                {
+                    b.HasOne("ScamboApi.Models.Usuario", "Anunciante")
+                        .WithMany("Anuncios")
+                        .HasForeignKey("AnuncianteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Anunciante");
+                });
+
             modelBuilder.Entity("ScamboApi.Models.Chat", b =>
                 {
                     b.HasOne("ScamboApi.Models.Anuncio", "Anuncio")
@@ -182,6 +198,11 @@ namespace ScamboApi.Migrations
             modelBuilder.Entity("ScamboApi.Models.Chat", b =>
                 {
                     b.Navigation("Mensagens");
+                });
+
+            modelBuilder.Entity("ScamboApi.Models.Usuario", b =>
+                {
+                    b.Navigation("Anuncios");
                 });
 #pragma warning restore 612, 618
         }

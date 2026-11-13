@@ -28,7 +28,7 @@ export default function useHubMensangens(){
     },[connection])
     function enviarMensagemTeste(){
         console.log(mensagens)
-        if(connection) connection.invoke("EnviarMensagem", novaMensagem)
+        if(connection) connection.invoke("EnviarMensagem", novaMensagem, 1)
     }
     function handleFormChange(e : ChangeEvent<HTMLInputElement>){
         setNovaMensagem(e.target.value)
