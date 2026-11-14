@@ -44,6 +44,8 @@ public class HubMensagens : Hub
             .Include("Remetente")
             .Include("Mensagens")
             .FirstOrDefaultAsync(x => x.Id == idChat);
+        if(!chat!.UsuarioFazParteDoChat(usuario!))
+            throw new Exception("Usuário não faz parte da conversa!");
         Mensagem mensagem = new Mensagem(){
             Chat = chat!, 
             Conteudo = conteudo,
