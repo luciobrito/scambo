@@ -42,6 +42,7 @@ public class ChatController : ControllerBase
         Usuario usuarioLogado = await _db.Usuarios.FindAsync(int.Parse (User.Claims.FirstOrDefault(x => x.Type ==ClaimTypes.NameIdentifier)?.Value ?? "0"));
         if(anuncio!.Anunciante.Equals(usuarioLogado!)) 
             return BadRequest("Não pode iniciar um chat no seu próprio anuncio.");
+        
         chat.Remetente = usuarioLogado!;
         _db.Chats.Add(chat);
         _db.SaveChanges();
@@ -65,7 +66,7 @@ public class ChatController : ControllerBase
             .Include("Anuncio.Anunciante")
             .Include("Remetente")
             .Include("Mensagens")
-            .FirstOrDefault(c => c.Id == idChat);
+            .FirstOrDefault(c => c.Id == 1);
         if (chat.UsuarioFazParteDoChat(usuarioLogado))
         {
             return Ok(chat.Mensagens);

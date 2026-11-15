@@ -5,7 +5,7 @@ import { useNavigate } from "react-router"
 
 interface ILoginData {
     email: string,
-    senha: string
+    senha: string,
 }
 interface ICadastroData {
     email: string,
@@ -15,13 +15,15 @@ interface ICadastroData {
 }
 
 export function useAuth() {
-    const [loginData, setLoginData] = useState<ILoginData>({ email: "", senha: "" })
+    const [loginData, setLoginData] = useState<ILoginData>({ email: "", senha: ""})
     const [cadastroData, setCadastroData] = useState<ICadastroData>({email:"",senha:"",senhaConfirmacao:"",nome:""})
     const [token, setToken] = useState()
     const [error, setError] = useState<string | null>()
     const [isAuth, setIsAuth] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState(false)
+    
     const navigate = useNavigate()
+    
     useEffect(() => {
         setIsAuth(checkAuth())
     }, [])

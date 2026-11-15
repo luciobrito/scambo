@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace ScamboApi.Models;
 
@@ -9,6 +10,7 @@ public class Mensagem
     public DateTime DataHora {get;set;}
     public Usuario Remetente {get;set;}
     public bool Visualizada {get;set;}
+    [JsonIgnore]
     public Chat Chat {get;set;}
     public Mensagem()
     {
