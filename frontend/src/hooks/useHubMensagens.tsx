@@ -10,10 +10,11 @@ export interface Mensagem {
     dataHora : Date
 }
 export interface Chat {
-    id : Number,
+    id : number,
     mensagens : Mensagem[],
     anuncio: Anuncio,
     remetente: Usuario,
+    ultimaMensagem: Mensagem
 }
 //Caso surja um novo chat, incluir via 
 export default function useHubMensangens(){
@@ -54,5 +55,5 @@ export default function useHubMensangens(){
         }
         
     }
-    return {mensagens, enviarMensagemTeste, handleFormChange}
+    return {mensagens, enviarMensagemTeste, handleFormChange, chatsUsuario}
 }

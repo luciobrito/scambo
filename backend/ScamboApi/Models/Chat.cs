@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace ScamboApi.Models
@@ -9,6 +10,8 @@ namespace ScamboApi.Models
         public Usuario Remetente {get;set;}
         [JsonIgnore]
         public List<Mensagem> Mensagens {get;set;}
+        [NotMapped]
+        public Mensagem UltimaMensagem {get;set;}
         public bool UsuarioFazParteDoChat(Usuario usuario)
         {
             if(Remetente.Equals(usuario) || Anuncio.Anunciante.Equals(usuario))

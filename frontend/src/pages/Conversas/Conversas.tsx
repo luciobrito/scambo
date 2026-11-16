@@ -9,6 +9,7 @@ import ItemConversa from "./ItemConversa";
 import DetalheConversa from "./DetalheConversa";
 import { IconeBusca, IconeNovaConversa } from "./IconesConversas";
 import styles from "./Conversas.module.css";
+import useHubMensangens from "../../hooks/useHubMensagens";
 
 /*
  * Tela /app/chat: lista de conversas e conversa aberta.
@@ -38,6 +39,9 @@ export default function Conversas() {
     const carregando = conversasCarregadas.estado.status === 'carregando' || usuario.estado.status === 'carregando';
     const erro = conversasCarregadas.estado.status === 'erro' || usuario.estado.status === 'erro';
     const meuId = usuario.estado.status === 'sucesso' ? usuario.estado.dados.id : null;
+
+    const {chatsUsuario} = useHubMensangens();
+
 
     const conversas = (conversasCarregadas.estado.status === 'sucesso' ? conversasCarregadas.estado.dados : [])
         .map(c => ({
@@ -114,8 +118,8 @@ export default function Conversas() {
                     {!carregando && conversas.length > 0 && visiveis.length === 0 && (
                         <p className={styles.avisoTexto}>Nenhuma conversa encontrada.</p>
                     )}
-                    {!carregando && visiveis.map(c => (
-                        <ItemConversa key={c.id} conversa={c} ativa={ativa?.id === c.id} onAbrir={() => abrir(c)} />
+                    {!carregando && chatsUsuario.map(c => (
+                        <ItemConversa key={c.id} conversa={visiveis[0]} chat={c} ativa={ativa?.id === c.id} onAbrir={() => abrir(visiveis[0])} />
                     ))}
                 </div>
             </aside>

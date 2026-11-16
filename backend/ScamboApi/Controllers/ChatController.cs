@@ -54,7 +54,12 @@ public class ChatController : ControllerBase
     public async Task<IActionResult> MyChats()
     {
         Usuario usuarioLogado = await _db.Usuarios.FindAsync(int.Parse (User.Claims.FirstOrDefault(x => x.Type ==ClaimTypes.NameIdentifier)?.Value ?? "0"));
-        List<Chat> chatsDoUsuario = _db.Chats.Include("Anuncio.Anunciante").Where(chat => chat.Remetente.Equals(usuarioLogado) || chat.Anuncio.Anunciante.Equals(usuarioLogado)).ToList();
+        List<Chat> chatsDoUsuario = _db.Chats.Include("Anuncio.Anunciante").Include("Remetente").Where(chat => chat.Remetente.Equals(usuarioLogado) || chat.Anuncio.Anunciante.Equals(usuarioLogado)).ToList();
+        foreach(Chat chat in chatsDoUsuario)
+        {
+             chat.UltimaMensagem = _db.Mensagens.Include("Chat").Where(m => m.Chat.Id == chat.Id).OrderByDescending(m => m.DataHora).FirstOrDefault();
+            
+        }
         return Ok(chatsDoUsuario);
     }
     [Authorize]

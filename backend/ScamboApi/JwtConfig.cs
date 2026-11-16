@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +7,7 @@ public static class JwtConfig
 {
     public static void AddJwtConfig(this IServiceCollection service)
     {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         var key=Encoding.ASCII.GetBytes( "HVvmZi/Zd/Yg8l/PQ6Fh/THTgTPmyB3QfRbZjtKKqwE=");
         service.AddAuthentication(config =>
         {
@@ -21,7 +23,9 @@ public static class JwtConfig
                 ValidateIssuerSigningKey =true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false,
+                NameClaimType = "name",
+                RoleClaimType = "roles"
             };
             config.Events = new JwtBearerEvents
             {
@@ -35,6 +39,7 @@ public static class JwtConfig
                     return Task.CompletedTask;
                 }
             };
+
         })
         ;
         
