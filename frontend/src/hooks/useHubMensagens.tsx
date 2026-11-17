@@ -5,9 +5,12 @@ import type { Anuncio } from "../types/Anuncio";
 import axios from "axios";
 
 export interface Mensagem {
+    id : number,
     conteudo : string,
-    remetente : string,
-    dataHora : Date
+    remetente : any,
+    dataHora : Date,
+    visualizada : boolean,
+
 }
 export interface Chat {
     id : number,
@@ -19,14 +22,16 @@ export interface Chat {
 //Caso surja um novo chat, incluir via 
 export default function useHubMensangens(){
     const [connection, setConnection] = useState<signalR.HubConnection>();
-    const [mensagens, setMensagens] = useState<String[]>([]);
+    const [mensagens, setMensagens] = useState<Mensagem[]>([]);
     const [novaMensagem, setNovaMensagem] = useState<String>();
     const [chatsUsuario, setChatsUsuario] = useState<Chat[]>([]);
     
     useEffect(() =>{
         const newConnection = new signalR.HubConnectionBuilder().withUrl(import.meta.env.VITE_API_URL + 'hubmensagens', {accessTokenFactory: ()=>`${localStorage.getItem('token')}`}).withAutomaticReconnect().build();
         setConnection(newConnection)
-        buscarChatsUsuario()    
+        buscarChatsUsuario()
+        buscarMensagensPorChat(1)  
+        
     },[])
     useEffect(()=>{
         if(connection){
@@ -48,6 +53,7 @@ export default function useHubMensangens(){
     async function buscarChatsUsuario(){
         try{
            var chats = await axios.get("api/chat/mychats")
+           console.log(chats.data)
            setChatsUsuario(chats.data)
         }
         catch(error){
@@ -55,5 +61,12 @@ export default function useHubMensangens(){
         }
         
     }
-    return {mensagens, enviarMensagemTeste, handleFormChange, chatsUsuario}
+    async function buscarMensagensPorChat(idChat: number){
+        try{
+            var response = await axios.get("api/chat/mensagens/"+idChat)
+            setMensagens(response.data)
+        }
+        catch{}
+    }
+    return {mensagens, buscarMensagensPorChat,enviarMensagemTeste, handleFormChange, chatsUsuario}
 }

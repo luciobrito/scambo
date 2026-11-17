@@ -5,6 +5,7 @@ import Avatar from "./Avatar";
 import { IconeEnviar, IconeImagem, IconeOpcoesHorizontal, IconeVoltar } from "./IconesConversas";
 import styles from "./Conversas.module.css";
 import useHubMensangens from "../../hooks/useHubMensagens";
+import { getAuthUserId } from "../../utils/isAuth";
 
 /*
  * Conversa aberta: mensagens, envio e recebimento em tempo real.
@@ -46,7 +47,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
     const [enviando, setEnviando] = useState(false);
     const [erroEnvio, setErroEnvio] = useState(false);
     const listaRef = useRef<HTMLDivElement>(null);
-
+    const hub = useHubMensangens();
     const mensagens = estado.status === 'sucesso' ? juntarMensagens(estado.dados, novas) : [];
     const banner = conversa.statusScambo ? BANNER_SCAMBO[conversa.statusScambo] : null;
 
@@ -116,13 +117,13 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                 {estado.status === 'sucesso' && mensagens.length === 0 && (
                     <p className={styles.avisoMensagens}>Nenhuma mensagem ainda. Diga olá! 👋</p>
                 )}
-                {mensagens.map(m => {
-                    const minha = m.remetenteId === meuId;
+                {hub.mensagens.map(m => {
+                    const minha = true;
                     return (
                         <div key={m.id} className={`${styles.linhaMensagem} ${minha ? styles.linhaMinha : ""}`}>
                             <div className={`${styles.balao} ${minha ? styles.balaoMeu : styles.balaoOutro}`}>
-                                <p className={styles.balaoTexto}>buscar aqui</p>
-                                <p className={styles.balaoHora}>{horaCurta(m.dataHora)}</p>
+                                <p className={styles.balaoTexto}>{m.conteudo} </p>
+                                <p className={styles.balaoHora}>{horaCurta(m.dataHora.toString())}</p>
                             </div>
                         </div>
                     );
