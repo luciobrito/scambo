@@ -1,29 +1,29 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type SubmitEvent, type SubmitEventHandler } from "react";
 import  * as signalR from '@microsoft/signalr'
 import type { Usuario } from "../types/Usuario";
 import type { Anuncio } from "../types/Anuncio";
 import axios from "axios";
 
-export interface Mensagem {
+export interface IMensagem {
     id : number,
     conteudo : string,
-    remetente : any,
+    remetente : Usuario,
     dataHora : Date,
     visualizada : boolean,
 
 }
 export interface Chat {
     id : number,
-    mensagens : Mensagem[],
+    mensagens : IMensagem[],
     anuncio: Anuncio,
     remetente: Usuario,
-    ultimaMensagem: Mensagem
+    ultimaMensagem: IMensagem
 }
 //Caso surja um novo chat, incluir via 
 export default function useHubMensangens(){
     const [connection, setConnection] = useState<signalR.HubConnection>();
-    const [mensagens, setMensagens] = useState<Mensagem[]>([]);
-    const [novaMensagem, setNovaMensagem] = useState<String>();
+    const [mensagens, setMensagens] = useState<IMensagem[]>([]);
+    const [novaMensagem, setNovaMensagem] = useState<string>();
     const [chatsUsuario, setChatsUsuario] = useState<Chat[]>([]);
     
     useEffect(() =>{
@@ -37,12 +37,19 @@ export default function useHubMensangens(){
         if(connection){
             connection.start().then(()=>{
                 connection.invoke("GetConnectionId").then(id => console.log("id: ", id))
-                connection.on("ReceberMensagem", (mensagem, idChat)=> setMensagens(mensagens => [...mensagens, mensagem]))
+                connection.on("ReceberMensagem", (mensagem)=> 
+                    {
+                        setMensagens(mensagens => [...mensagens, JSON.parse(mensagem)])
+                        console.log(
+                        JSON.parse(mensagem))
+                    })
                 
             })
         }
     },[connection])
-    function enviarMensagemTeste(){
+    function enviarMensagemTeste( e : SubmitEvent<HTMLFormElement>){
+        e.preventDefault()
+        setNovaMensagem("")
         console.log(chatsUsuario)
         console.log(mensagens)
         if(connection) connection.invoke("EnviarMensagem", novaMensagem, 1)
@@ -68,5 +75,5 @@ export default function useHubMensangens(){
         }
         catch{}
     }
-    return {mensagens, buscarMensagensPorChat,enviarMensagemTeste, handleFormChange, chatsUsuario}
+    return {mensagens, novaMensagem,buscarMensagensPorChat,enviarMensagemTeste, handleFormChange, chatsUsuario}
 }

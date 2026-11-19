@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using ScamboApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace ScamboApi.Services;
 public interface IMensagensClient
@@ -55,7 +56,9 @@ public class HubMensagens : Hub
             };
         _db.Mensagens.Add(mensagem);
         _db.SaveChanges();
-        await Clients.Group(idChat.ToString()).SendAsync("ReceberMensagem", conteudo);
+        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase  };
+        string jsonString = JsonSerializer.Serialize(mensagem, options);
+        await Clients.Group(idChat.ToString()).SendAsync("ReceberMensagem", jsonString);
         
     }
     public string GetConnectionId()

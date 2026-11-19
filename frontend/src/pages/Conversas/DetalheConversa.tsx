@@ -4,7 +4,7 @@ import { assinarMensagens, enviarMensagem, horaCurta, listarMensagens, type Conv
 import Avatar from "./Avatar";
 import { IconeEnviar, IconeImagem, IconeOpcoesHorizontal, IconeVoltar } from "./IconesConversas";
 import styles from "./Conversas.module.css";
-import useHubMensangens from "../../hooks/useHubMensagens";
+import useHubMensangens, { type IMensagem } from "../../hooks/useHubMensagens";
 import { getAuthUserId } from "../../utils/isAuth";
 
 /*
@@ -56,7 +56,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
     // Mantém a conversa rolada até a mensagem mais recente.
     useEffect(() => {
         if (listaRef.current) listaRef.current.scrollTop = listaRef.current.scrollHeight;
-    }, [mensagens.length]);
+    }, [hub.mensagens.length]);
 
     async function enviar(e: FormEvent) {
         e.preventDefault();
@@ -84,7 +84,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                 </button>
                 <Avatar id={conversa.contato.id} nome={conversa.contato.nome} online={conversa.contato.online} pequeno />
                 <div className={styles.detalheContato}>
-                    <h2 className={styles.detalheNome}>{conversa.contato.nome}</h2>
+                    <h2 className={styles.detalheNome}>teste</h2>
                     <p className={`${styles.detalheStatus} ${conversa.contato.online ? styles.detalheOnline : ""}`}>
                         {conversa.contato.online ? "online" : "visto há pouco"} · {conversa.anuncio.titulo}
                     </p>
@@ -106,7 +106,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                 {banner && <span className={styles.bannerSelo}>{banner.selo}</span>}
             </div>
 
-            <div className={styles.mensagens} ref={listaRef} aria-live="polite">
+            <div className={styles.mensagens} id="mensagens-section" ref={listaRef} aria-live="polite">
                 {estado.status === 'carregando' && <p className={styles.avisoMensagens}>Carregando mensagens...</p>}
                 {estado.status === 'erro' && (
                     <div className={styles.avisoMensagens} role="alert">
@@ -118,7 +118,7 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
                     <p className={styles.avisoMensagens}>Nenhuma mensagem ainda. Diga olá! 👋</p>
                 )}
                 {hub.mensagens.map(m => {
-                    const minha = true;
+                    const minha = getAuthUserId() == m.remetente.id;
                     return (
                         <div key={m.id} className={`${styles.linhaMensagem} ${minha ? styles.linhaMinha : ""}`}>
                             <div className={`${styles.balao} ${minha ? styles.balaoMeu : styles.balaoOutro}`}>
@@ -131,13 +131,13 @@ export default function DetalheConversa({ conversa, meuId, onVoltar, onEnviada }
             </div>
 
             {erroEnvio && <p className={styles.erroEnvio} role="alert">Não foi possível enviar a mensagem. Tente novamente.</p>}
-            <form className={styles.compositor} onSubmit={enviar}>
+            <form className={styles.compositor} onSubmit={(e) => {enviar; hub.enviarMensagemTeste(e)}}>
                 {/* TODO(back-end): o upload já existe (POST api/imagens, ImagensController), mas falta
                     associar a imagem à mensagem (ex.: campo imagemUrl em Mensagem). */}
                 <button type="button" className={styles.botaoIcone} disabled aria-label="Enviar imagem (em breve)" title="Envio de imagem em breve">
                     <IconeImagem />
                 </button>
-                <input value={texto} onChange={e => setTexto(e.target.value)} placeholder="Mensagem..."
+                <input value={hub.novaMensagem} onChange={e => {setTexto(e.target.value); hub.handleFormChange(e)}} placeholder="Mensagem..."
                     aria-label="Mensagem" className={styles.campoMensagem} maxLength={1000} />
                 <button type="submit" aria-label="Enviar mensagem" disabled={!texto.trim() || enviando}
                     className={`${styles.botaoEnviar} ${texto.trim() ? styles.botaoEnviarAtivo : ""}`}>

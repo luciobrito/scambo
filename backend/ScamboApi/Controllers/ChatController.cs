@@ -64,14 +64,14 @@ public class ChatController : ControllerBase
     }
     [Authorize]
     [HttpGet("mensagens/{idChat}")]
-    public async Task<IActionResult> MensagensPorChat([FromHeader] int idChat)
+    public async Task<IActionResult> MensagensPorChat([FromRoute] int idChat)
     {   
         Usuario usuarioLogado = await _db.Usuarios.FindAsync(User.AuthUserId());
         Chat chat = _db.Chats
             .Include("Anuncio.Anunciante")
             .Include("Remetente")
             .Include("Mensagens")
-            .FirstOrDefault(c => c.Id == 1);
+            .FirstOrDefault(c => c.Id == idChat);
         if (chat.UsuarioFazParteDoChat(usuarioLogado))
         {
             return Ok(chat.Mensagens);
