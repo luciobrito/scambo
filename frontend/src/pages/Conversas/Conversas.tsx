@@ -9,7 +9,7 @@ import ItemConversa from "./ItemConversa";
 import DetalheConversa from "./DetalheConversa";
 import { IconeBusca, IconeNovaConversa } from "./IconesConversas";
 import styles from "./Conversas.module.css";
-import useHubMensangens from "../../hooks/useHubMensagens";
+import useHubMensangens, { type Chat } from "../../hooks/useHubMensagens";
 
 /*
  * Tela /app/chat: lista de conversas e conversa aberta.
@@ -30,7 +30,6 @@ export default function Conversas() {
     const conversasCarregadas = useCarregarDados(listarConversas);
     const usuario = useCarregarDados(obterUsuarioLogado);
     const [busca, setBusca] = useState("");
-    const [selecionadaId, setSelecionadaId] = useState<number | null>(null);
     // No mobile, alterna entre a lista e a conversa aberta.
     const [mostrandoChat, setMostrandoChat] = useState(false);
     const [lidas, setLidas] = useState<Set<number>>(new Set());
@@ -40,33 +39,29 @@ export default function Conversas() {
     const erro = conversasCarregadas.estado.status === 'erro' || usuario.estado.status === 'erro';
     const meuId = usuario.estado.status === 'sucesso' ? usuario.estado.dados.id : null;
 
-    const {chatsUsuario} = useHubMensangens();
+    const {chatsUsuario, mensagens, alterarChatAtivo, enviarMensagemTeste, handleFormChange, novaMensagem, idChatAtivo} = useHubMensangens();
 
 
-    const conversas = (conversasCarregadas.estado.status === 'sucesso' ? conversasCarregadas.estado.dados : [])
-        .map(c => ({
-            ...c,
-            naoLidas: lidas.has(c.id) ? 0 : c.naoLidas,
-            ultimaMensagem: ultimas[c.id] ?? c.ultimaMensagem
-        }))
-        .sort(maisRecenteAntes);
+
 
     const termo = normalizarTexto(busca);
-    const visiveis = conversas.filter(c => !termo
-        || normalizarTexto(c.contato.nome).includes(termo)
+    const visiveis = chatsUsuario.filter(c => !termo
+        || normalizarTexto(c.anuncio.anunciante.nome).includes(termo)
+        || normalizarTexto(c.remetente.nome).includes(termo)
         || normalizarTexto(c.anuncio.titulo).includes(termo));
 
-    const ativa = conversas.find(c => c.id === selecionadaId) ?? conversas[0];
-    const totalNaoLidas = conversas.filter(c => c.naoLidas > 0).length;
+    const ativa = chatsUsuario.find(c => c.id === idChatAtivo) ?? chatsUsuario[0];
+    const totalNaoLidas = chatsUsuario.filter(c => c.naoLidas > 0).length;
 
-    function abrir(conversa: Conversa) {
-        setSelecionadaId(conversa.id);
+    function abrir(conversa: Chat) {
+        alterarChatAtivo(conversa.id)
         setMostrandoChat(true);
+        /*
         if (conversa.naoLidas > 0) {
             // Atualiza a tela na hora; se a API falhar, o contador volta na próxima carga da lista.
             setLidas(atual => new Set(atual).add(conversa.id));
             marcarComoLida(conversa.id).catch(() => { });
-        }
+        }*/
     }
 
     function recarregar() {
@@ -108,25 +103,25 @@ export default function Conversas() {
                             <button type="button" className={styles.botaoPrimario} onClick={recarregar}>Tentar novamente</button>
                         </div>
                     )}
-                    {!carregando && !erro && conversas.length === 0 && (
+                    {!carregando && !erro && chatsUsuario.length === 0 && (
                         <div className={styles.aviso}>
                             <p className={styles.avisoTitulo}>Nenhuma conversa ainda</p>
                             <p className={styles.avisoTexto}>Encontre um item e toque em Scambo para começar.</p>
                             <Link to="/app/products" className={styles.botaoPrimario}>Ver itens</Link>
                         </div>
                     )}
-                    {!carregando && conversas.length > 0 && visiveis.length === 0 && (
+                    {!carregando && chatsUsuario.length > 0 && visiveis.length === 0 && (
                         <p className={styles.avisoTexto}>Nenhuma conversa encontrada.</p>
                     )}
                     {!carregando && chatsUsuario.map(c => (
-                        <ItemConversa key={c.id} conversa={visiveis[0]} chat={c} ativa={ativa?.id === c.id} onAbrir={() => abrir(visiveis[0])} />
+                        <ItemConversa key={c.id}  chat={c} ativa={ativa?.id === c.id} onAbrir={() => abrir(c)} />
                     ))}
                 </div>
             </aside>
 
             <section className={styles.painelChat} aria-label="Conversa aberta">
                 {ativa && meuId !== null
-                    ? <DetalheConversa key={ativa.id} conversa={ativa} meuId={meuId}
+                    ? <DetalheConversa key={ativa.id} chat={ativa} enviarMensagem={enviarMensagemTeste} handleFormChange={handleFormChange} novaMensagem={novaMensagem} mensagensConversa={mensagens} meuId={meuId}
                         onVoltar={() => setMostrandoChat(false)}
                         onEnviada={m => setUltimas(atual => ({ ...atual, [m.conversaId]: m }))} />
                     : <div className={styles.semConversa}>

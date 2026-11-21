@@ -12,6 +12,7 @@ public class Mensagem
     public bool Visualizada {get;set;}
     [JsonIgnore]
     public Chat Chat {get;set;}
+    public int ChatId {get; set => field = Chat.Id;}
     public Mensagem()
     {
         

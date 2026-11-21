@@ -1,20 +1,22 @@
 import { jwtDecode, type JwtPayload } from "jwt-decode";
-import type { Chat, Mensagem } from "../hooks/useHubMensagens";
+import type { Chat, IMensagem } from "../hooks/useHubMensagens";
 import type { Anuncio } from "./Anuncio";
 import type { Usuario } from "./Usuario";
 
 export class ChatClass implements Chat{
     id: number;
-    mensagens: Mensagem[];
+    mensagens: IMensagem[];
     anuncio: Anuncio;
     remetente: Usuario;
-    ultimaMensagem: Mensagem; 
+    ultimaMensagem: IMensagem; 
+    naoLidas: number; 
     constructor(chat : Chat){
         this.id = chat.id
         this.mensagens = chat.mensagens
         this.anuncio = chat.anuncio
         this.remetente = chat.remetente
         this.ultimaMensagem = chat.ultimaMensagem
+        this.naoLidas = chat.naoLidas
     }
     getUsuarioDestino() : Usuario {
         if(this.getIdUsuarioLogado() == this.remetente.id) return this.anuncio.anunciante

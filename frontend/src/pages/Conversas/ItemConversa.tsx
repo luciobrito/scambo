@@ -8,13 +8,11 @@ import styles from "./Conversas.module.css";
 interface ItemConversaProps {
     chat: Chat,
     ativa: boolean,
-    conversa: Conversa
     onAbrir: () => void
 }
 
-export default function ItemConversa({ chat, ativa, conversa, onAbrir }: ItemConversaProps) {
-    const { anuncio, remetente, mensagens } = chat;
-    const { contato, ultimaMensagem, naoLidas } = conversa;
+export default function ItemConversa({ chat, ativa, onAbrir }: ItemConversaProps) {
+    const { anuncio, remetente, mensagens, naoLidas } = chat;
     const chatClass = new ChatClass(chat)
     return (
         <button type="button" onClick={onAbrir} aria-current={ativa ? "true" : undefined}
@@ -23,10 +21,10 @@ export default function ItemConversa({ chat, ativa, conversa, onAbrir }: ItemCon
             <div className={styles.itemTexto}>
                 <div className={styles.itemTopo}>
                     <p className={styles.itemNome}>{chatClass.getUsuarioDestino().nome}</p>
-                    {ultimaMensagem && <p className={styles.itemHora}>{quandoConversa(chat.ultimaMensagem.dataHora.toString())}</p>}
+                    {chat.ultimaMensagem && <p className={styles.itemHora}>{quandoConversa(chat.ultimaMensagem.dataHora.toString())}</p>}
                 </div>
                 <p className={styles.itemAnuncio}>{anuncio.titulo}</p>
-                {ultimaMensagem && (
+                {chat.ultimaMensagem && (
                     <p className={`${styles.itemUltima} ${naoLidas > 0 ? styles.itemUltimaNaoLida : ""}`}>{chat.ultimaMensagem.conteudo}</p>
                 )}
             </div>

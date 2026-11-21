@@ -12,6 +12,8 @@ namespace ScamboApi.Models
         public List<Mensagem> Mensagens {get;set;}
         [NotMapped]
         public Mensagem UltimaMensagem {get;set;}
+        [NotMapped]
+        public int NaoLidas {get;set;}
         public bool UsuarioFazParteDoChat(Usuario usuario)
         {
             if(Remetente.Equals(usuario) || Anuncio.Anunciante.Equals(usuario))

@@ -57,8 +57,8 @@ public class ChatController : ControllerBase
         List<Chat> chatsDoUsuario = _db.Chats.Include("Anuncio.Anunciante").Include("Remetente").Where(chat => chat.Remetente.Equals(usuarioLogado) || chat.Anuncio.Anunciante.Equals(usuarioLogado)).ToList();
         foreach(Chat chat in chatsDoUsuario)
         {
-             chat.UltimaMensagem = _db.Mensagens.Include("Chat").Where(m => m.Chat.Id == chat.Id).OrderByDescending(m => m.DataHora).FirstOrDefault();
-            
+            chat.UltimaMensagem = _db.Mensagens.Include("Chat").Where(m => m.Chat.Id == chat.Id).OrderByDescending(m => m.DataHora).FirstOrDefault();
+            chat.NaoLidas = _db.Mensagens.Include("Chat").Where(m => m.Chat.Id == chat.Id && m.Visualizada == false).Count();
         }
         return Ok(chatsDoUsuario);
     }
