@@ -17,9 +17,9 @@ public class AuthService : IAuthService
 
     public string AutenticarUsuario(UsuarioLoginDTO usuario)
     {
-        string senhaUsuario = _db.Usuarios.Where(x => x.Email == usuario.Email).FirstOrDefault().Senha;
-        if(PasswordHasher.VerifyPassword(usuario.Senha, senhaUsuario)){
-            string token = TokenService.GenerateToken(usuario);
+        Usuario usuarioDb = _db.Usuarios.Where(x => x.Email == usuario.Email).FirstOrDefault();
+        if(PasswordHasher.VerifyPassword(usuario.Senha, usuarioDb.Senha)){
+            string token = TokenService.GenerateToken(usuarioDb);
             return token;
         }
         throw new Exception("Usuário ou senha incorretos");

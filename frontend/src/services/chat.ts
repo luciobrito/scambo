@@ -1,6 +1,6 @@
 import { api, usarMock } from "./api";
 import { conversasMock, mensagensMock } from "./mocks/chat.mock";
-import type { StatusScambo } from "./usuario";
+import type { StatusScambo, Usuario } from "./usuario";
 
 /*
  * Serviço do chat (tela /app/chat): conversas, mensagens e tempo real.
@@ -39,6 +39,7 @@ export interface Mensagem {
     id: number,
     conversaId: number,
     remetenteId: number,
+    remetente? : Usuario,
     conteudo: string,
     // Data ISO 8601.
     dataHora: string,

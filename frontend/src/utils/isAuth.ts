@@ -12,3 +12,9 @@ export const checkAuth = (): boolean => {
     }
     return false
 }
+
+export const getAuthUserId = () : number => {
+            var token = localStorage.getItem("token")
+        const decoded = jwtDecode<JwtPayload>(token!)
+        return Number.parseFloat(decoded.sub!)
+}

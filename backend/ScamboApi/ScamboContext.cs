@@ -15,5 +15,10 @@ public class ScamboContext : DbContext
         
         
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Usuario>().HasMany(e => e.Anuncios);
+        modelBuilder.Entity<Anuncio>().HasOne(e => e.Anunciante);
+    }
 
 }
