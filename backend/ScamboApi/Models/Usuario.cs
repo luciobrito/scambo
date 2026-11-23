@@ -2,11 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ScamboApi.DTOs;
+using ScamboApi.Interfaces;
 
 namespace ScamboApi.Models
 {
     [Index(nameof(Email), IsUnique = true)]
-    public class Usuario
+    public class Usuario : ITimestampedEntity
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -20,6 +21,9 @@ namespace ScamboApi.Models
         public string TipoUsuario { get; set; }
         [JsonIgnore]
         public List<Anuncio> Anuncios {get;set;}
+        public DateTime CriadoEm { get; set; }
+        public DateTime? AtualizadoEm { get; set; }
+
         public Usuario()
         {
             

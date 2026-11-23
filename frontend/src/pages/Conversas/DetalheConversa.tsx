@@ -71,7 +71,7 @@ export default function DetalheConversa({ chat, mensagensConversa, meuId, onVolt
                 </button>
                 <Avatar id={chatClass.getUsuarioDestino().id} nome={chatClass.getUsuarioDestino().nome} online={true} pequeno />
                 <div className={styles.detalheContato}>
-                    <h2 className={styles.detalheNome}>teste</h2>
+                    <h2 className={styles.detalheNome}>{chatClass.getUsuarioDestino().nome}</h2>
                     <p className={`${styles.detalheStatus}`}>
                         online · {chat.anuncio.titulo}
                     </p>

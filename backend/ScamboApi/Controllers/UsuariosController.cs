@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScamboApi.DTOs;
 using ScamboApi.Models;
 using ScamboApi.Services;
@@ -40,11 +41,14 @@ public class UsuariosController : ControllerBase
     }
     [Authorize]
     [HttpGet]
-    public IActionResult MeuUsuario()
+    public async Task<IActionResult> MeuUsuario()
     {
         var user = int.Parse (User.Claims.FirstOrDefault(x => x.Type ==ClaimTypes.NameIdentifier)?.Value ?? "0");
         Usuario usuario = _db.Usuarios.Find(user);
+        var anunciosAtivo = await _db.Anuncios.Where(a => a.Anunciante.Equals(usuario)).ToListAsync();
+        var quantidadeAnuncios = await _db.Anuncios.Where(a => a.Anunciante.Equals(usuario)).CountAsync();
+        RelatorioUsuario relatorioUsuario = new RelatorioUsuario(usuario.Id,usuario.Nome,usuario.Email,usuario.CriadoEm, usuario.AtualizadoEm,  anunciosAtivo,[], quantidadeAnuncios);
         usuario.Senha = "";
-        return Ok(usuario);
+        return Ok(relatorioUsuario);
     }
 }
