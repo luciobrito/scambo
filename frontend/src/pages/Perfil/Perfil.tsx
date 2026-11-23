@@ -32,9 +32,10 @@ function CartaoUsuario({ perfil }: { perfil: DadosPerfil }) {
     const { usuario, estatisticas } = perfil;
     const userData = useUserData();
     const numeros = [
-        { rotulo: "Doações", valor: String(estatisticas.doacoes) },
-        { rotulo: "Scambos", valor: String(estatisticas.scambos) },
-        { rotulo: "Avaliação", valor: `${estatisticas.avaliacao.toFixed(1)} ★` },
+        { rotulo: "Scambos Abertos", valor: String(userData.relatorioUsuario?.anunciosAtivos.length) },
+        { rotulo: "Scambos", valor: String(userData.relatorioUsuario?.quantidadeAnuncios) },
+        { rotulo: "Avaliação", valor: `${estatisticas.avaliacao.toFixed(1)} ★`, },
+        
     ];
     return (
         <section className={`${styles.cartaoUsuario} ${styles.areaCartao}`}>
@@ -42,13 +43,13 @@ function CartaoUsuario({ perfil }: { perfil: DadosPerfil }) {
             <div className={styles.circuloPequeno} />
             <div className={styles.identidade}>
                 <div className={styles.avatarWrapper}>
-                    <div className={styles.avatar} aria-hidden="true">{userData.usuario?.nome[0].toUpperCase()}</div>
-                    <span className={styles.avatarSelo}><IconeMais /></span>
+                    <div className={styles.avatar} aria-hidden="true">{userData.relatorioUsuario?.nome[0].toUpperCase()}</div>
+                    <span className={styles.avatarSelo} onClick={()=>{alert("")}}><IconeMais /></span>
                 </div>
                 <div>
-                    <h2 className={styles.nome}>{userData.usuario?.nome}</h2>
-                    <p className={styles.handle}>{userData.usuario?.email}{usuario.cidade && ` · ${usuario.cidade}`}</p>
-                    <p className={styles.membro}><span className={styles.ponto} />Membro desde {mesAno(userData.usuario?.criadoEm.toString() ?? "")}</p>
+                    <h2 className={styles.nome}>{userData.relatorioUsuario?.nome}</h2>
+                    <p className={styles.handle}>{userData.relatorioUsuario?.email}{usuario.cidade && ` · ${usuario.cidade}`}</p>
+                    <p className={styles.membro}><span className={styles.ponto} />Membro desde {mesAno(userData.relatorioUsuario?.criadoEm.toString() ?? "")}</p>
                 </div>
             </div>
             <div className={styles.numeros}>

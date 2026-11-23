@@ -13,6 +13,10 @@ import { checkAuth } from "./utils/isAuth";
 
 export const roteador = createBrowserRouter([
     {
+        path:'',
+        middleware: [redirectApp]
+    },
+    {
         path:"/login",
         middleware: [guestMiddleware],
         element: <Login/>
@@ -56,4 +60,7 @@ async function guestMiddleware(){
 
 async function authMiddleware(){
     if(!checkAuth()) throw redirect('/login')
+}
+async function redirectApp(){
+    throw redirect('/app')
 }
