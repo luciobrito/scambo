@@ -4,6 +4,9 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.OpenApi;
+using ScamboApi.Enums;
+using ScamboApi.Interfaces;
 
 namespace ScamboApi.Services;
 
@@ -15,18 +18,35 @@ public class ServicoArmazenamento : IServicoArmazenamento
         _blobContainerClient = blobContainerClient;
         _blobContainerClient.CreateIfNotExists();
     }
-    public void EnviarArquivo(IFormFile arquivo)
+    public string EnviarArquivo(IFormFile arquivo)
     {
+        var nomeArquivo = GerarNomeUnicoArquivo(arquivo);
         ValidarArquivo(arquivo);
         var headerCustomizada = HeaderCustomizada(arquivo);
         using(var memoryStream = new MemoryStream())
         {
             arquivo.CopyTo(memoryStream);
             memoryStream.Position = 0;
-            BlobClient blob = _blobContainerClient.GetBlobClient(GerarNomeUnicoArquivo(arquivo));
+            BlobClient blob = _blobContainerClient.GetBlobClient(nomeArquivo);
             blob.Upload(memoryStream);
             blob.SetHttpHeaders(headerCustomizada);
         }
+        return nomeArquivo;
+    }
+    public string EnviarArquivo(IFormFile arquivo, TipoArquivo tipoArquivo)
+    {
+        string nomeArquivo = tipoArquivo.GetDisplayName()+"/"+GerarNomeUnicoArquivo(arquivo);   
+        ValidarArquivo(arquivo);
+        var headerCustomizada = HeaderCustomizada(arquivo);
+        using(var memoryStream = new MemoryStream())
+        {
+            arquivo.CopyTo(memoryStream);
+            memoryStream.Position = 0;
+            BlobClient blob = _blobContainerClient.GetBlobClient(nomeArquivo);
+            blob.Upload(memoryStream);
+            blob.SetHttpHeaders(headerCustomizada);
+        }
+        return nomeArquivo;
     }
     private void ValidarArquivo(IFormFile arquivo)
     {
