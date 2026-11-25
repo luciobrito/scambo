@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata;
 using Azure.Storage.Blobs;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,9 @@ builder.Services.AddScoped<IServicoArmazenamento>(provider =>
     BlobContainerClient blobClient = new BlobContainerClient(storageConnectionString,"imagens");
     return new ServicoArmazenamento(blobClient);
 });
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddJwtConfig();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 

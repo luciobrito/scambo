@@ -1,3 +1,5 @@
+using ScamboApi.DTOs;
+
 namespace ScamboApi.Models
 {
     public class Anuncio
@@ -10,5 +12,20 @@ namespace ScamboApi.Models
         public string Modalidade { get; set; }
         public DateTime DataPublicacao { get; set; }
         public string Status { get; set; }
+        public Usuario Anunciante {get;set;}
+        public int AnuncianteId {get;set;}
+        public Anuncio()
+        {
+            
+        }
+        public Anuncio(NovoAnuncioDTO novoAnuncioDTO)
+        {
+            Titulo = novoAnuncioDTO.Titulo;
+            Descricao = novoAnuncioDTO.Descricao;
+            EstadoConservacao = novoAnuncioDTO.EstadoConservacao;
+            Modalidade = novoAnuncioDTO.Modalidade;
+            DataPublicacao = DateTime.Now;
+            Status = novoAnuncioDTO.Status;
+        }
     }
 }

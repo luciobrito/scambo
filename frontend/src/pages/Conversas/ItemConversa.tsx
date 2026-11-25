@@ -1,27 +1,31 @@
+import type { Chat } from "../../hooks/useHubMensagens";
 import { quandoConversa, type Conversa } from "../../services/chat";
+import type { Anuncio } from "../../types/Anuncio";
+import { ChatClass } from "../../types/Chat";
 import Avatar from "./Avatar";
 import styles from "./Conversas.module.css";
 
 interface ItemConversaProps {
-    conversa: Conversa,
+    chat: Chat,
     ativa: boolean,
     onAbrir: () => void
 }
 
-export default function ItemConversa({ conversa, ativa, onAbrir }: ItemConversaProps) {
-    const { contato, anuncio, ultimaMensagem, naoLidas } = conversa;
+export default function ItemConversa({ chat, ativa, onAbrir }: ItemConversaProps) {
+    const { anuncio, remetente, mensagens, naoLidas } = chat;
+    const chatClass = new ChatClass(chat)
     return (
         <button type="button" onClick={onAbrir} aria-current={ativa ? "true" : undefined}
             className={`${styles.itemConversa} ${ativa ? styles.itemConversaAtivo : ""}`}>
-            <Avatar id={contato.id} nome={contato.nome} online={contato.online} />
+            <Avatar id={anuncio.anunciante.id} nome={anuncio.anunciante.nome} online={false} />
             <div className={styles.itemTexto}>
                 <div className={styles.itemTopo}>
-                    <p className={styles.itemNome}>{contato.nome}</p>
-                    {ultimaMensagem && <p className={styles.itemHora}>{quandoConversa(ultimaMensagem.dataHora)}</p>}
+                    <p className={styles.itemNome}>{chatClass.getUsuarioDestino().nome}</p>
+                    {chat.ultimaMensagem && <p className={styles.itemHora}>{quandoConversa(chat.ultimaMensagem.dataHora.toString())}</p>}
                 </div>
                 <p className={styles.itemAnuncio}>{anuncio.titulo}</p>
-                {ultimaMensagem && (
-                    <p className={`${styles.itemUltima} ${naoLidas > 0 ? styles.itemUltimaNaoLida : ""}`}>{ultimaMensagem.conteudo}</p>
+                {chat.ultimaMensagem && (
+                    <p className={`${styles.itemUltima} ${naoLidas > 0 ? styles.itemUltimaNaoLida : ""}`}>{chat.ultimaMensagem.conteudo}</p>
                 )}
             </div>
             {naoLidas > 0 && (
