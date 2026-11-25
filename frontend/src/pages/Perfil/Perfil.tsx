@@ -114,6 +114,8 @@ export default function Perfil() {
     // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
     // (ex.: POST api/auth/logout ou descartar o token) e limpar dados do usuário em memória.
     const sair = () => navigate("/login");
+    const addDoacao = () => {navigate("/anuncio/create")}
+
 
     return (
         <div className={styles.pagina} style={variaveisPaleta}>
@@ -123,6 +125,9 @@ export default function Perfil() {
                     <p className={styles.subtitulo}>Gerencie suas informações e histórico</p>
                 </div>
                 <span className={styles.logoMobile}>Scambo</span>
+                <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={addDoacao}>
+                    Adicionar Doação
+                </button>
                 <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={sair}>
                     <IconeSair />Sair
                 </button>

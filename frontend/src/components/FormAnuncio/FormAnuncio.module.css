@@ -1,0 +1,16 @@
+.mainFormsStyle {
+    display: flex;
+    flex-direction: column; 
+    gap: 1rem;
+}
+
+.divInputs {
+    display: flex;         
+    flex-direction: column; 
+    gap: 1rem; 
+}
+
+.customCombobox {
+    max-width: fit-content;
+    align-self: center;
+}
