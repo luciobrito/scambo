@@ -2,35 +2,42 @@ import Botao from "../Botao";
 import { InputField } from "../InputField";
 import { fontes, cores } from "../../lib/pallete";
 import React, {useState, type SubmitEvent} from 'react';
-import useAnuncio from "../../hooks/useAnuncio";
+import { useAnuncio } from "../../hooks/useAnuncio";
+import { useUserData } from "../../hooks/useUserData";
 import styles from "./FormAnuncio.module.css";
+import type { Usuario } from "../../types/Usuario";
 
 interface FormCadastroProps {
     
 };
 
 export default function FormAnuncio({}: FormCadastroProps) {
-    const {handleCriarAnuncio, isLoading} = useAnuncio();
+    const {handleCriarAnuncio, handleInputCriarAnuncio, handleSelectCriarAnuncio, isLoading} = useAnuncio();
+    const {usuario} = useUserData()
 
     const handleOnSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-        handleCriarAnuncio(event)
+        if (usuario != undefined)
+            handleCriarAnuncio(event, usuario)
     }
 
-
+    const teste = (event: SubmitEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        console.log("foi")
+    } 
     const form = (
-        <form id="formAnuncio" onSubmit={handleOnSubmit} className={styles.gridForms1}>
+        <form id="formAnuncio" onSubmit={handleOnSubmit} className={styles.gridForms1} >
             <div className={styles.divInputs}>
-                <InputField label={"Titulo"} name="titulo"/>
-                <InputField label={"Descricao"} name="descricao"/>
+                <InputField label={"Titulo"} name="titulo" onChange={handleInputCriarAnuncio}/>
+                <InputField label={"Descricao"} name="descricao" onChange={handleInputCriarAnuncio}/>
                 {/* <InputField label={"Imagem"} type="file"/> */}
-                <label htmlFor="condicao">Condição:</label>
-                <select id="condicao" name="estado" className={styles.customCombobox}>
+                <label htmlFor="estadoConservacao">Condição:</label>
+                <select id="estadoConservacao" name="estadoConservacao" className={styles.customCombobox}>
                     <option value="novo">Novo</option>
                     <option value="pouco-usado">Pouco Usado</option>
                     <option value="usado">Usado</option>
                 </select>
                 <label htmlFor="tipo">Tipo</label>
-                <select id="tipo"  name="modalidade" className={styles.customCombobox}>
+                <select id="tipo"  name="modalidade" className={styles.customCombobox} onSelect={handleSelectCriarAnuncio}>
                     <option value="tipo1">Tipo 1</option>
                     <option value="tipo2">Tipo 2</option>
                     <option value="tipo3">Tipo 3</option>

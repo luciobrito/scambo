@@ -1,47 +1,65 @@
 import axios from 'axios';
 import React, { useEffect, useState, type ChangeEvent, type SubmitEvent, type SubmitEventHandler } from 'react';
+import type { Usuario } from "../types/Usuario";
 
 interface IAnuncio {
-    Id?: number,
-    Titulo?: string,
-    Descricao?: string,
-    EstadoConservacao?: string,
-    Modalidade?: string,
-    DataPublicacao?: Date,
-    Status?: string
+    id?: number,
+    anuncianteId?: number,
+    titulo?: string,
+    descricao?: string,
+    estadoConservacao?: string,
+    modalidade?: string,
+    dataPublicacao?: Date,
+    status?: string,
 }
 
-export default function useAnuncio() {
+export function useAnuncio() {
     const [anuncioData, setAnuncioData] = useState<IAnuncio>()
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleCriarAnuncio = async (e : SubmitEvent<HTMLFormElement>) => {
+    const handleCriarAnuncio = async (e : SubmitEvent<HTMLFormElement>, usuario: Usuario) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget);
         setAnuncioData({
-            Titulo: formData.get('titulo') as string,
-            Descricao: formData.get('descricao') as string,
-            EstadoConservacao: formData.get('estado') as string,
-            Modalidade: formData.get('modalidade') as string,
-            DataPublicacao: new Date(),
-            Status: "aberto",
+            titulo: formData.get('titulo') as string,
+            descricao: formData.get('descricao') as string,
+            estadoConservacao: formData.get('estadoConservacao') as string,
+            modalidade: formData.get('modalidade') as string,
+            dataPublicacao: new Date(),
+            status: "aberto",
+            anuncianteId: usuario.id,
         })
         try {
             setIsLoading(true)
+            // if(anuncioData?.dataPublicacao == null){
+            //     setAnuncioData({
+            //             dataPublicacao: new Date(),
+            //             status: "aberto",
+            //             anuncianteId: usuario.id,
+            //         })
+            // }
             const request = await axios.post(import.meta.env.VITE_API_URL + "api/anuncio", anuncioData)
             console.log(request.statusText)
-            console.log(anuncioData)
         }
         catch (error) {
             if(axios.isAxiosError(error)) {
                 console.log(error.code)
                 console.log(error.status)
-                console.log(anuncioData)
             }
         }
         finally {
             setIsLoading(false)
         }
+    }
+
+    const handleInputCriarAnuncio = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setAnuncioData((dadosMantidos) => ({ ...dadosMantidos, [name]: value }))
+    }
+    const handleSelectCriarAnuncio = (e: ChangeEvent<HTMLSelectElement>) => {
+        console.log("Teste")
+        const { name, value } = e.target;
+        setAnuncioData((dadosMantidos) => ({ ...dadosMantidos, [name]: value }))
     }
     // const defaultAnuncio:IAnuncio[] = []
     // const App = () => {}
@@ -55,6 +73,6 @@ export default function useAnuncio() {
     //     .post<IAnuncio[]>(import.meta.env.VITE_API_URL + "api/anuncio");
     // }, []);
 
-    return {handleCriarAnuncio, isLoading}
+    return {handleCriarAnuncio, handleInputCriarAnuncio, handleSelectCriarAnuncio, isLoading}
 }
 
