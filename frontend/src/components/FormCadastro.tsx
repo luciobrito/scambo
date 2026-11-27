@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { InputField } from "./InputField";
-import { Navigate, useNavigate, type NavigateFunction } from "react-router";
+import { useNavigate } from "react-router";
 import { fontes, cores } from "../lib/pallete";
 import styles from "./FormCadastro.module.css"
-import { formToJSON } from "axios";
 import { useAuth } from "../hooks/useAuth";
 import Botao from "./Botao";
 import "./FormCadastro.module.css"
@@ -68,7 +66,7 @@ export default function FormCadastro({isDesktop}: FormCadastroProps) {
 
     return form;
 }
-
+/*
 function submitForm(navigate: NavigateFunction ,nome: string, email: string, password: string, confPassword: string, termos: boolean) {
     if(validarCampos(nome, email, password, confPassword, termos)){
         navigate("/");
@@ -85,4 +83,4 @@ function isCampoEmpty(input: string){
     return (input.trim().length == 0);
 }
 
-
+*/

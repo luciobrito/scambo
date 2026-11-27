@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import useCarregarDados from "../../hooks/useCarregarDados";
-import { listarConversas, marcarComoLida, type Conversa, type Mensagem } from "../../services/chat";
+import { listarConversas } from "../../services/chat";
 import { obterUsuarioLogado } from "../../services/usuario";
 import { normalizarTexto } from "../../services/anuncios";
 import { variaveisPaleta } from "../../pallete";
@@ -22,19 +22,12 @@ import useHubMensangens, { type Chat } from "../../hooks/useHubMensagens";
  * - Uma conversa nova nasce do botão "Confirmar Scambo" da tela de Produtos (POST api/chat/conversas).
  */
 
-function maisRecenteAntes(a: Conversa, b: Conversa) {
-    return (b.ultimaMensagem?.dataHora ?? "").localeCompare(a.ultimaMensagem?.dataHora ?? "");
-}
-
 export default function Conversas() {
     const conversasCarregadas = useCarregarDados(listarConversas);
     const usuario = useCarregarDados(obterUsuarioLogado);
     const [busca, setBusca] = useState("");
     // No mobile, alterna entre a lista e a conversa aberta.
     const [mostrandoChat, setMostrandoChat] = useState(false);
-    const [lidas, setLidas] = useState<Set<number>>(new Set());
-    const [ultimas, setUltimas] = useState<Record<number, Mensagem>>({});
-
     const carregando = conversasCarregadas.estado.status === 'carregando' || usuario.estado.status === 'carregando';
     const erro = conversasCarregadas.estado.status === 'erro' || usuario.estado.status === 'erro';
     const meuId = usuario.estado.status === 'sucesso' ? usuario.estado.dados.id : null;
@@ -123,7 +116,7 @@ export default function Conversas() {
                 {ativa && meuId !== null
                     ? <DetalheConversa key={ativa.id} chat={ativa} enviarMensagem={enviarMensagemTeste} handleFormChange={handleFormChange} novaMensagem={novaMensagem} mensagensConversa={mensagens} meuId={meuId}
                         onVoltar={() => setMostrandoChat(false)}
-                        onEnviada={m => setUltimas(atual => ({ ...atual, [m.conversaId]: m }))} />
+                        onEnviada={m => {console.log(m.conteudo)}} />
                     : <div className={styles.semConversa}>
                         <p className={styles.avisoTexto}>{carregando ? "Carregando..." : "Selecione uma conversa para começar."}</p>
                     </div>}

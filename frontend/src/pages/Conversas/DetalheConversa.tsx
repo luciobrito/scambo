@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type ChangeEvent, type FormEvent, type SubmitEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type SubmitEvent } from "react";
 import useCarregarDados from "../../hooks/useCarregarDados";
-import { assinarMensagens, enviarMensagem, horaCurta, listarMensagens, type Conversa, type Mensagem } from "../../services/chat";
+import { assinarMensagens, horaCurta, listarMensagens, type Mensagem } from "../../services/chat";
 import Avatar from "./Avatar";
 import { IconeEnviar, IconeImagem, IconeOpcoesHorizontal, IconeVoltar } from "./IconesConversas";
 import styles from "./Conversas.module.css";
-import useHubMensangens, { type Chat, type IMensagem } from "../../hooks/useHubMensagens";
+import  { type Chat, type IMensagem } from "../../hooks/useHubMensagens";
 import { getAuthUserId } from "../../utils/isAuth";
 import { ChatClass } from "../../types/Chat";
 
@@ -41,7 +41,7 @@ function juntarMensagens(carregadas: Mensagem[], novas: Mensagem[]) {
     return [...porId.values()].sort((a, b) => a.dataHora.localeCompare(b.dataHora));
 }
 
-export default function DetalheConversa({ chat, mensagensConversa, meuId, onVoltar, onEnviada, enviarMensagem, handleFormChange, novaMensagem }: DetalheConversaProps) {
+export default function DetalheConversa({ chat, mensagensConversa, onVoltar, enviarMensagem, handleFormChange, novaMensagem }: DetalheConversaProps) {
     
     //const hubMensagens = useHubMensangens();
     
@@ -49,8 +49,7 @@ export default function DetalheConversa({ chat, mensagensConversa, meuId, onVolt
     const { estado, recarregar } = useCarregarDados(carregar);
     const [novas, setNovas] = useState<Mensagem[]>([]);
     const [texto, setTexto] = useState("");
-    const [enviando, setEnviando] = useState(false);
-    const [erroEnvio, setErroEnvio] = useState(false);
+    const erroEnvio = false;
     const listaRef = useRef<HTMLDivElement>(null);
     //const hub = useHubMensangens();
     const mensagens = estado.status === 'sucesso' ? juntarMensagens(estado.dados, novas) : [];
@@ -126,7 +125,7 @@ export default function DetalheConversa({ chat, mensagensConversa, meuId, onVolt
                 </button>
                 <input value={novaMensagem} onChange={e => {setTexto(e.target.value); handleFormChange(e)}} placeholder="Mensagem..."
                     aria-label="Mensagem" className={styles.campoMensagem} maxLength={1000} />
-                <button type="submit" aria-label="Enviar mensagem" disabled={!texto.trim() || enviando}
+                <button type="submit" aria-label="Enviar mensagem" disabled={!texto.trim()}
                     className={`${styles.botaoEnviar} ${texto.trim() ? styles.botaoEnviarAtivo : ""}`}>
                     <IconeEnviar />
                 </button>

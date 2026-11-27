@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useState, type ChangeEvent, type SubmitEvent, type SubmitEventHandler } from "react"
+import { useEffect, useState, type ChangeEvent, type SubmitEvent } from "react"
 import { checkAuth } from "../utils/isAuth"
 import { useNavigate } from "react-router"
 

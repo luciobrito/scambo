@@ -1,14 +1,10 @@
 import { createBrowserRouter, redirect } from "react-router"
-import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Cadastro/Cadastro";
-import NovoItem from "./pages/NovoItem/NovoItem";
-import Chat from "./pages/Chat/Chat";
 import Produtos from "./pages/Produtos/Produtos";
 import LayoutApp from "./components/LayoutApp/LayoutApp";
 import Perfil from "./pages/Perfil/Perfil";
 import Conversas from "./pages/Conversas/Conversas";
-import { useAuth } from "./hooks/useAuth";
 import { checkAuth } from "./utils/isAuth";
 
 export const roteador = createBrowserRouter([
@@ -25,11 +21,6 @@ export const roteador = createBrowserRouter([
         path:"/cadastro",
         middleware: [guestMiddleware],
         element: <Cadastro/>
-    },
-    {
-        path:"chat",
-        middleware:[authMiddleware],
-        element: <Chat/>
     },
     {
         path: "app",

@@ -1,5 +1,4 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import type { Usuario } from "../types/Usuario";
 import axios from "axios";
 import type { Anuncio } from "../types/Anuncio";
 

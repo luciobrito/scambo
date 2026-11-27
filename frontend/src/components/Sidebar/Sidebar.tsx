@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
-import { NavLink, useNavigate } from "react-router";
-import useCarregarDados from "../../hooks/useCarregarDados";
-import { obterUsuarioLogado } from "../../services/usuario";
+import { NavLink } from "react-router";
+
 import { IconeChat, IconeInicio, IconePerfil, IconeSair } from "./IconesSidebar";
 import styles from "./Sidebar.module.css";
 import { useAuth } from "../../hooks/useAuth";
@@ -29,14 +28,13 @@ const ITENS_MENU: ItemMenu[] = [
 ];
 
 export default function Sidebar() {
-    const { estado } = useCarregarDados(obterUsuarioLogado);
     //const usuario = estado.status === 'sucesso' ? estado.dados : null;
-    const navigate = useNavigate();
+    
     const {logout} = useAuth()
     const {relatorioUsuario} = useUserData()
     // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
     // (mesma regra do botão Sair da tela de Perfil).
-    const sair = () => navigate("/login");
+    
     
     return (
         <aside className={styles.sidebar}>
