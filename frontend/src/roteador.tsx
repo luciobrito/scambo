@@ -6,6 +6,7 @@ import LayoutApp from "./components/LayoutApp/LayoutApp";
 import Perfil from "./pages/Perfil/Perfil";
 import Conversas from "./pages/Conversas/Conversas";
 import { checkAuth } from "./utils/isAuth";
+import NovoAnuncio from "./pages/NovoAnuncio/NovoAnuncio";
 
 export const roteador = createBrowserRouter([
     {
@@ -38,6 +39,11 @@ export const roteador = createBrowserRouter([
                 element: <Conversas/>
             }
         ]
+    },
+    {
+        path: "/anuncio/create",
+        element: <NovoAnuncio/>
+
     }
 ]);
 

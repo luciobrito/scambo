@@ -119,6 +119,9 @@ export default function Perfil() {
     // (ex.: POST api/auth/logout ou descartar o token) e limpar dados do usuário em memória.
     const sair = () => navigate("/login");
     const {logout} = useAuth()
+    const addDoacao = () => {navigate("/anuncio/create")}
+
+
     return (
         <div className={styles.pagina} style={variaveisPaleta}>
             <header className={styles.cabecalho}>
@@ -128,6 +131,10 @@ export default function Perfil() {
                 </div>
                 <span className={styles.logoMobile}>Scambo</span>
                 <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={logout}>
+                <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={addDoacao}>
+                    Adicionar Doação
+                </button>
+                <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={sair}>
                     <IconeSair />Sair
                 </button>
                 <button type="button" className={`${styles.botaoIcone} ${styles.somenteMobile}`} aria-label="Ir para configurações"
