@@ -6,6 +6,8 @@ import { atualizarBio, mesAno, obterPerfil, type Perfil as DadosPerfil } from ".
 import { variaveisPaleta } from "../../pallete";
 import { IconeEngrenagem, IconeMais, IconeSair, IconeSeta } from "./IconesPerfil";
 import styles from "./Perfil.module.css";
+import { useUserData } from "../../hooks/useUserData";
+import { useAuth } from "../../hooks/useAuth";
 
 /*
  * Tela /app/profile: dados, histórico e configurações do usuário logado.
@@ -28,10 +30,12 @@ const CONFIGURACOES = [
 
 function CartaoUsuario({ perfil }: { perfil: DadosPerfil }) {
     const { usuario, estatisticas } = perfil;
+    const userData = useUserData();
     const numeros = [
-        { rotulo: "Doações", valor: String(estatisticas.doacoes) },
-        { rotulo: "Scambos", valor: String(estatisticas.scambos) },
-        { rotulo: "Avaliação", valor: `${estatisticas.avaliacao.toFixed(1)} ★` },
+        { rotulo: "Scambos Abertos", valor: String(userData.relatorioUsuario?.anunciosAtivos.length) },
+        { rotulo: "Scambos", valor: String(userData.relatorioUsuario?.quantidadeAnuncios) },
+        { rotulo: "Avaliação", valor: `${estatisticas.avaliacao.toFixed(1)} ★`, },
+        
     ];
     return (
         <section className={`${styles.cartaoUsuario} ${styles.areaCartao}`}>
@@ -39,13 +43,13 @@ function CartaoUsuario({ perfil }: { perfil: DadosPerfil }) {
             <div className={styles.circuloPequeno} />
             <div className={styles.identidade}>
                 <div className={styles.avatarWrapper}>
-                    <div className={styles.avatar} aria-hidden="true">{usuario.nome[0].toUpperCase()}</div>
-                    <span className={styles.avatarSelo}><IconeMais /></span>
+                    <div className={styles.avatar} aria-hidden="true">{userData.relatorioUsuario?.nome[0].toUpperCase()}</div>
+                    <span className={styles.avatarSelo} onClick={()=>{alert("")}}><IconeMais /></span>
                 </div>
                 <div>
-                    <h2 className={styles.nome}>{usuario.nome}</h2>
-                    <p className={styles.handle}>@{usuario.nomeUsuario}{usuario.cidade && ` · ${usuario.cidade}`}</p>
-                    <p className={styles.membro}><span className={styles.ponto} />Membro desde {mesAno(usuario.membroDesde)}</p>
+                    <h2 className={styles.nome}>{userData.relatorioUsuario?.nome}</h2>
+                    <p className={styles.handle}>{userData.relatorioUsuario?.email}{usuario.cidade && ` · ${usuario.cidade}`}</p>
+                    <p className={styles.membro}><span className={styles.ponto} />Membro desde {mesAno(userData.relatorioUsuario?.criadoEm.toString() ?? "")}</p>
                 </div>
             </div>
             <div className={styles.numeros}>
@@ -114,6 +118,7 @@ export default function Perfil() {
     // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
     // (ex.: POST api/auth/logout ou descartar o token) e limpar dados do usuário em memória.
     const sair = () => navigate("/login");
+    const {logout} = useAuth()
     const addDoacao = () => {navigate("/anuncio/create")}
 
 
@@ -125,6 +130,7 @@ export default function Perfil() {
                     <p className={styles.subtitulo}>Gerencie suas informações e histórico</p>
                 </div>
                 <span className={styles.logoMobile}>Scambo</span>
+                <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={logout}>
                 <button type="button" className={`${styles.botaoSair} ${styles.somenteDesktop}`} onClick={addDoacao}>
                     Adicionar Doação
                 </button>
@@ -211,7 +217,7 @@ export default function Perfil() {
                                         ))}
                                     </div>}
                             </section>
-
+                            {/* 
                             <section className={`${styles.secao} ${styles.areaConquistas}`}>
                                 <h3 className={styles.secaoTitulo}>Conquistas</h3>
                                 <div className={styles.conquistas}>
@@ -223,7 +229,7 @@ export default function Perfil() {
                                         </div>
                                     ))}
                                 </div>
-                            </section>
+                            </section>*/}
                         </div>
 
                         <button type="button" className={`${styles.botaoSair} ${styles.botaoSairMobile} ${styles.somenteMobile}`} onClick={sair}>

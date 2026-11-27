@@ -1,7 +1,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScamboApi.DTOs;
+using ScamboApi.Enums;
+using ScamboApi.Extensions;
+using ScamboApi.Interfaces;
 using ScamboApi.Models;
 using ScamboApi.Services;
 namespace ScamboApi.Controllers;
@@ -12,10 +16,12 @@ public class UsuariosController : ControllerBase
 {
     private readonly ScamboContext _db;
     private readonly IAuthService _auth;
-    public UsuariosController(ScamboContext db, IAuthService auth)
+    private readonly IServicoArmazenamento _servicoArmazenamento;
+    public UsuariosController(ScamboContext db, IAuthService auth, IServicoArmazenamento servicoArmazenamento)
     {
         _db = db;
         _auth = auth;
+        _servicoArmazenamento = servicoArmazenamento;
     }
     // TODO(front): a sidebar e a tela /app/profile esperam GET api/usuarios/me,
     // GET api/usuarios/me/perfil e PATCH api/usuarios/me (dependem da autenticação).
@@ -40,11 +46,24 @@ public class UsuariosController : ControllerBase
     }
     [Authorize]
     [HttpGet]
-    public IActionResult MeuUsuario()
+    public async Task<IActionResult> MeuUsuario()
     {
         var user = int.Parse (User.Claims.FirstOrDefault(x => x.Type ==ClaimTypes.NameIdentifier)?.Value ?? "0");
         Usuario usuario = _db.Usuarios.Find(user);
+        var anunciosAtivo = await _db.Anuncios.Where(a => a.Anunciante.Equals(usuario)).ToListAsync();
+        var quantidadeAnuncios = await _db.Anuncios.Where(a => a.Anunciante.Equals(usuario)).CountAsync();
+        RelatorioUsuario relatorioUsuario = new RelatorioUsuario(usuario.Id,usuario.Nome,usuario.Email,usuario.CriadoEm, usuario.AtualizadoEm,  anunciosAtivo,[], quantidadeAnuncios);
         usuario.Senha = "";
-        return Ok(usuario);
+        return Ok(relatorioUsuario);
+    }
+    [Authorize]
+    [HttpPatch("avatar")]
+    public async Task<IActionResult> AlterarFotoDePerfilUsuario(IFormFile imagem)
+    {
+        var usuarioLogado = _db.Usuarios.Find(User.AuthUserId());
+        string nomeArquivo = _servicoArmazenamento.EnviarArquivo(imagem, TipoArquivo.FotoPerfil);
+        usuarioLogado?.UrlFotoPerfil = nomeArquivo;
+        _db.SaveChanges();
+        return Ok();
     }
 }

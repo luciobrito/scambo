@@ -1,6 +1,6 @@
 import type { Chat } from "../../hooks/useHubMensagens";
-import { quandoConversa, type Conversa } from "../../services/chat";
-import type { Anuncio } from "../../types/Anuncio";
+import { quandoConversa } from "../../services/chat";
+
 import { ChatClass } from "../../types/Chat";
 import Avatar from "./Avatar";
 import styles from "./Conversas.module.css";
@@ -12,7 +12,7 @@ interface ItemConversaProps {
 }
 
 export default function ItemConversa({ chat, ativa, onAbrir }: ItemConversaProps) {
-    const { anuncio, remetente, mensagens, naoLidas } = chat;
+    const { anuncio, naoLidas } = chat;
     const chatClass = new ChatClass(chat)
     return (
         <button type="button" onClick={onAbrir} aria-current={ativa ? "true" : undefined}

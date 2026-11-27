@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using ScamboApi.Interfaces;
 
 namespace ScamboApi.Models
 {
-    public class Chat
+    public class Chat : ITimestampedEntity
     {
         public int Id { get; set; }
         public Anuncio Anuncio {get;set;}
@@ -14,6 +15,9 @@ namespace ScamboApi.Models
         public Mensagem UltimaMensagem {get;set;}
         [NotMapped]
         public int NaoLidas {get;set;}
+        public DateTime CriadoEm { get; set; }
+        public DateTime? AtualizadoEm { get; set; }
+
         public bool UsuarioFazParteDoChat(Usuario usuario)
         {
             if(Remetente.Equals(usuario) || Anuncio.Anunciante.Equals(usuario))

@@ -67,6 +67,12 @@ namespace ScamboApi.Migrations
                     b.Property<int>("AnuncioId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("RemetenteId")
                         .HasColumnType("int");
 
@@ -116,6 +122,12 @@ namespace ScamboApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -136,6 +148,9 @@ namespace ScamboApi.Migrations
 
                     b.Property<string>("TipoUsuario")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UrlFotoPerfil")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

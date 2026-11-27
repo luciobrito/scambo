@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, type ChangeEvent, type SubmitEvent, type SubmitEventHandler } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type SubmitEvent } from "react";
 import  * as signalR from '@microsoft/signalr'
 import type { Usuario } from "../types/Usuario";
 import type { Anuncio } from "../types/Anuncio";
 import axios from "axios";
-import Chat from "../pages/Chat/Chat";
 
 export interface IMensagem {
     id : number,
@@ -82,9 +81,6 @@ export default function useHubMensangens(){
             setMensagens(response.data)
         }
         catch{}
-    }
-    function alterarUltimaMensagemChat(chatId : number){
-
     }
     function alterarChatAtivo(chatId : number){
         setIdChatAtivo(chatId);

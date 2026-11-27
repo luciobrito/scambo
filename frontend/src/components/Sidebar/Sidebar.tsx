@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
-import { NavLink, useNavigate } from "react-router";
-import useCarregarDados from "../../hooks/useCarregarDados";
-import { obterUsuarioLogado } from "../../services/usuario";
+import { NavLink } from "react-router";
+
 import { IconeChat, IconeInicio, IconePerfil, IconeSair } from "./IconesSidebar";
 import styles from "./Sidebar.module.css";
 import { useAuth } from "../../hooks/useAuth";
@@ -29,15 +28,14 @@ const ITENS_MENU: ItemMenu[] = [
 ];
 
 export default function Sidebar() {
-    const { estado } = useCarregarDados(obterUsuarioLogado);
     //const usuario = estado.status === 'sucesso' ? estado.dados : null;
-    const navigate = useNavigate();
+    
     const {logout} = useAuth()
-    const {usuario} = useUserData()
+    const {relatorioUsuario} = useUserData()
     // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
     // (mesma regra do botão Sair da tela de Perfil).
-    const sair = () => navigate("/login");
-
+    
+    
     return (
         <aside className={styles.sidebar}>
             <div className={styles.cabecalho}>
@@ -60,10 +58,10 @@ export default function Sidebar() {
 
             <div className={styles.usuario}>
                 <NavLink to="/app/profile" className={styles.usuarioPerfil} aria-label="Abrir meu perfil">
-                    <div className={styles.avatar} aria-hidden="true">{usuario?.nome[0].toUpperCase()}</div>
+                    <div className={styles.avatar} aria-hidden="true">{relatorioUsuario?.nome[0].toUpperCase()}</div>
                     <div className={styles.usuarioTexto}>
-                        <p className={styles.usuarioNome}>{usuario ? usuario.nome : "Carregando..."}</p>
-                        {usuario && <p className={styles.usuarioId}>@{usuario.email}</p>}
+                        <p className={styles.usuarioNome}>{relatorioUsuario ? relatorioUsuario.nome : "Carregando..."}</p>
+                        {relatorioUsuario && <p className={styles.usuarioId}>{relatorioUsuario.email}</p>}
                     </div>
                 </NavLink>
                 <button type="button" className={styles.botaoSair} onClick={logout} aria-label="Sair da conta" title="Sair">
